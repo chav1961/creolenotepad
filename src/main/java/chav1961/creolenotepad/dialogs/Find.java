@@ -14,7 +14,7 @@ import chav1961.purelib.ui.interfaces.Format;
 import chav1961.purelib.ui.interfaces.RefreshMode;
 import chav1961.purelib.ui.swing.useful.JCreoleEditor;
 
-@LocaleResourceLocation("i18n:xml:root://chav1961.bt.creolenotepad.dialogs.Find/chav1961/bt/creolenotepad/i18n/localization.xml")
+@LocaleResourceLocation("i18n:xml:root://chav1961.creolenotepad.dialogs.Find/chav1961/creolenotepad/i18n/localization.xml")
 @LocaleResource(value="find.title",tooltip="find.title.tt",help="find.title.help")
 @Action(resource=@LocaleResource(value="find.button.find",tooltip="find.button.find.tt"),actionString="find")
 public class Find implements FormManager<Object, Find>, ModuleAccessor {

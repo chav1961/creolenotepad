@@ -14,7 +14,7 @@ import chav1961.purelib.ui.interfaces.Format;
 import chav1961.purelib.ui.interfaces.RefreshMode;
 import chav1961.purelib.ui.swing.useful.JCreoleEditor;
 
-@LocaleResourceLocation("i18n:xml:root://chav1961.bt.creolenotepad.dialogs.FindReplace/chav1961/bt/creolenotepad/i18n/localization.xml")
+@LocaleResourceLocation("i18n:xml:root://chav1961.creolenotepad.dialogs.FindReplace/chav1961/creolenotepad/i18n/localization.xml")
 @LocaleResource(value="findreplace.title",tooltip="findreplace.title.tt",help="findreplace.title.help")
 @Action(resource=@LocaleResource(value="findreplace.button.find",tooltip="findreplace.button.find.tt"),actionString="find")
 @Action(resource=@LocaleResource(value="findreplace.button.replace",tooltip="findreplace.button.replace.tt"),actionString="replace")

@@ -14,7 +14,7 @@ import chav1961.purelib.ui.interfaces.FormManager;
 import chav1961.purelib.ui.interfaces.Format;
 import chav1961.purelib.ui.interfaces.RefreshMode;
 
-@LocaleResourceLocation("i18n:xml:root://chav1961.bt.creolenotepad.dialogs.Settings/chav1961/bt/creolenotepad/i18n/localization.xml")
+@LocaleResourceLocation("i18n:xml:root://chav1961.creolenotepad.dialogs.Settings/chav1961/creolenotepad/i18n/localization.xml")
 @LocaleResource(value="settings.title",tooltip="settings.title.tt",help="settings.title.help")
 public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 	private final LoggerFacade	facade;

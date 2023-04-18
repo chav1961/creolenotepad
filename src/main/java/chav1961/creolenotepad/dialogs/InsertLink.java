@@ -13,7 +13,7 @@ import chav1961.purelib.ui.interfaces.Format;
 import chav1961.purelib.ui.interfaces.RefreshMode;
 import chav1961.purelib.ui.swing.useful.JCreoleEditor;
 
-@LocaleResourceLocation("i18n:xml:root://chav1961.bt.creolenotepad.dialogs.InsertLink/chav1961/bt/creolenotepad/i18n/localization.xml")
+@LocaleResourceLocation("i18n:xml:root://chav1961.creolenotepad.dialogs.InsertLink/chav1961/creolenotepad/i18n/localization.xml")
 @LocaleResource(value="insertlink.title",tooltip="insertlink.title.tt",help="insertlink.title.help")
 public class InsertLink implements FormManager<Object, InsertLink>, ModuleAccessor {
 	private final LoggerFacade	facade;
