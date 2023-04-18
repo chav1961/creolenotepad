@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.io.File;
@@ -80,6 +81,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public static final String			ARG_PROPFILE_LOCATION = "prop";
 	public static final String			LRU_PREFIX = "lru.";
 	public static final String			PROP_CSS_FILE = "cssFile";
+	public static final String			PROP_APP_RECTANGLE = "appRectangle";
 	
 	public static final String			KEY_APPLICATION_TITLE = "chav1961.bt.creolenotepad.Application.title";
 	public static final String			KEY_APPLICATION_MESSAGE_READY = "chav1961.bt.creolenotepad.Application.message.ready";
@@ -121,7 +123,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	private static final String			MENU_EDIT_ORDERED_ITALIC = "menu.main.edit.italic";
 	private static final String			MENU_TOOLS_PREVIEW = "menu.main.tools.preview";
 
-	private static final String[]		MENUS = {
+	static final String[]				MENUS = {
 											MENU_FILE_LRU,
 											MENU_FILE_SAVE,
 											MENU_FILE_SAVE_AS,
@@ -146,30 +148,30 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 											MENU_TOOLS_PREVIEW
 										};
 	
-	private static final long 			FILE_LRU = 1L << 0;
-	private static final long 			FILE_SAVE = 1L << 1;
-	private static final long 			FILE_SAVE_AS = 1L << 2;
-	private static final long 			EDIT = 1L << 3;
-	private static final long 			EDIT_UNDO = 1L << 4;
-	private static final long 			EDIT_REDO = 1L << 5;
-	private static final long 			EDIT_CUT = 1L << 6;
-	private static final long 			EDIT_COPY = 1L << 7;
-	private static final long 			EDIT_PASTE = 1L << 8;
-	private static final long 			EDIT_PASTE_LINK = 1L << 9;
-	private static final long 			EDIT_PASTE_IMAGE = 1L << 10;
-	private static final long 			EDIT_FIND = 1L << 11;
-	private static final long 			EDIT_FIND_REPLACE = 1L << 12;
-	private static final long 			EDIT_CAPTION_UP = 1L << 13;
-	private static final long 			EDIT_CAPTION_DOWN = 1L << 14;
-	private static final long 			EDIT_LIST_UP = 1L << 15;
-	private static final long 			EDIT_LIST_DOWN = 1L << 16;
-	private static final long 			EDIT_ORDERED_LIST_UP = 1L << 17;
-	private static final long 			EDIT_ORDERED_LIST_DOWN = 1L << 18;
-	private static final long 			EDIT_ORDERED_BOLD = 1L << 19;
-	private static final long 			EDIT_ORDERED_ITALIC = 1L << 20;	
-	private static final long 			TOOLS_PREVIEW = 1L << 21;
-	private static final long 			TOTAL_EDIT = EDIT | EDIT_CUT | EDIT_COPY| EDIT_PASTE_LINK | EDIT_PASTE_IMAGE | EDIT_FIND | EDIT_FIND_REPLACE;
-	private static final long 			TOTAL_EDIT_SELECTION = EDIT_CAPTION_UP | EDIT_CAPTION_DOWN | EDIT_LIST_UP | EDIT_LIST_DOWN | EDIT_ORDERED_LIST_UP | EDIT_ORDERED_LIST_DOWN | EDIT_ORDERED_BOLD | EDIT_ORDERED_ITALIC;	
+	static final long 					FILE_LRU = 1L << 0;
+	static final long 					FILE_SAVE = 1L << 1;
+	static final long 					FILE_SAVE_AS = 1L << 2;
+	static final long 					EDIT = 1L << 3;
+	static final long 					EDIT_UNDO = 1L << 4;
+	static final long 					EDIT_REDO = 1L << 5;
+	static final long 					EDIT_CUT = 1L << 6;
+	static final long 					EDIT_COPY = 1L << 7;
+	static final long 					EDIT_PASTE = 1L << 8;
+	static final long 					EDIT_PASTE_LINK = 1L << 9;
+	static final long 					EDIT_PASTE_IMAGE = 1L << 10;
+	static final long 					EDIT_FIND = 1L << 11;
+	static final long 					EDIT_FIND_REPLACE = 1L << 12;
+	static final long 					EDIT_CAPTION_UP = 1L << 13;
+	static final long 					EDIT_CAPTION_DOWN = 1L << 14;
+	static final long 					EDIT_LIST_UP = 1L << 15;
+	static final long 					EDIT_LIST_DOWN = 1L << 16;
+	static final long 					EDIT_ORDERED_LIST_UP = 1L << 17;
+	static final long 					EDIT_ORDERED_LIST_DOWN = 1L << 18;
+	static final long 					EDIT_ORDERED_BOLD = 1L << 19;
+	static final long 					EDIT_ORDERED_ITALIC = 1L << 20;	
+	static final long 					TOOLS_PREVIEW = 1L << 21;
+	static final long 					TOTAL_EDIT = EDIT | EDIT_CUT | EDIT_COPY| EDIT_PASTE_LINK | EDIT_PASTE_IMAGE | EDIT_FIND | EDIT_FIND_REPLACE;
+	static final long 					TOTAL_EDIT_SELECTION = EDIT_CAPTION_UP | EDIT_CAPTION_DOWN | EDIT_LIST_UP | EDIT_LIST_DOWN | EDIT_ORDERED_LIST_UP | EDIT_ORDERED_LIST_DOWN | EDIT_ORDERED_BOLD | EDIT_ORDERED_ITALIC;	
 	
 	private static enum FileFormat {
 		CREOLE(CREOLE_FILTER);
@@ -280,7 +282,16 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	        ((JToolBarWithMeta)toolbar).assignAccelerators(editor);
 	        ((JToolBarWithMeta)toolbar).assignAccelerators(viewer);
 			SwingUtils.assignExitMethod4MainWindow(this, ()->exit());
-			SwingUtils.centerMainWindow(this, 0.85f);
+			
+			if (properties.containsKey(PROP_APP_RECTANGLE)) {
+				final String[]	content = properties.getProperty(PROP_APP_RECTANGLE).split("\\s*,\\s*");
+				
+				setBounds(Integer.valueOf(content[0]), Integer.valueOf(content[1]), Integer.valueOf(content[2]), Integer.valueOf(content[3]));
+				setPreferredSize(new Dimension(Integer.valueOf(content[2]), Integer.valueOf(content[3])));
+			}
+			else {
+				SwingUtils.centerMainWindow(this, 0.85f);
+			}
 	        emm.setEnableMaskOff(FILE_SAVE | FILE_SAVE_AS | TOTAL_EDIT | TOOLS_PREVIEW);
 	        clipboardChanged();
 	        fillLRU(fcm.getLastUsed());
@@ -319,6 +330,11 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	
 	@Override
 	public void close() throws IOException {
+		final Rectangle	rect = getBounds();
+		
+		properties.setProperty(PROP_APP_RECTANGLE, String.format("%1$d,%2$d,%3$d,%4$d", rect.x, rect.y, rect.width, rect.height));
+		properties.store(props);
+		
 		fsi.close();
 		PureLibSettings.PURELIB_LOCALIZER.pop(localizer);
 		PureLibSettings.PURELIB_LOCALIZER.removeLocaleChangeListener(this);
