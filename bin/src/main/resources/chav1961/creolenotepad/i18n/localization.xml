@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localization xmlns="http://www.i18n.purelib.chav1961.ru/">
+	<lang name="en">
+<!-- Application -->
+		<key name="chav1961.bt.creolenotepad.Application.title">(c) 2023, A.V.Chernomyrdin. Simple CREOLE editor V.R.=0.0 %1$s</key>
+		<key name="chav1961.bt.creolenotepad.Application.message.ready">Ready</key>
+		<key name="chav1961.bt.creolenotepad.Application.message.notfound">Not found</key>		
+		<key name="chav1961.bt.creolenotepad.Application.message.replaced">%1$s items replaced</key>
+		<key name="chav1961.bt.creolenotepad.Application.message.file.not.exists">File (%1$s) is not exists and will be removed from LRU list</key>
+		<key name="chav1961.bt.creolenotepad.Application.message.nocssfound">Custom CSS not defined. Default will be used. Use Tools-&gt;Settings menu to define custom CSS</key>
+		<key name="chav1961.bt.creolenotepad.Application.message.cssnotexists">Custom CSS file(%1$s) is not exists or is not accessible for you. Default will be used.</key>
+		<key name="chav1961.bt.creolenotepad.Application.help.title">About...</key>
+		<key name="chav1961.bt.creolenotepad.Application.help.content">uri(aboutApplication.cre)</key>
+
+<!-- Main menu -->
+		<key name="menu.main.file">File</key>
+		<key name="menu.main.file.tt">File menu</key>
+		<key name="menu.main.file.new.creole">New Creole file</key>
+		<key name="menu.main.file.new.creole.tt">Create new Creole File</key>
+		<key name="menu.main.file.open">Open file</key>
+		<key name="menu.main.file.open.tt">Open existent file</key>
+		<key name="menu.main.file.lru">Open last recent</key>
+		<key name="menu.main.file.lru.tt">Open last recent files</key>		
+		<key name="menu.main.file.save">Save</key>
+		<key name="menu.main.file.save.tt">Save file</key>
+		<key name="menu.main.file.saveAs">Save as...</key>
+		<key name="menu.main.file.saveAs.tt">Save file as...</key>
+		<key name="menu.main.file.exit">Exit</key>
+		<key name="menu.main.file.exit.tt">Exit application</key>
+		<key name="menu.main.edit">Edit</key>
+		<key name="menu.main.edit.tt">Edit image</key>
+		<key name="menu.main.edit.undo">Undo</key>
+		<key name="menu.main.edit.undo.tt">Undo last operations</key>
+		<key name="menu.main.edit.redo">Redo</key>
+		<key name="menu.main.edit.redo.tt">Redo last operations</key>
+		<key name="menu.main.edit.cut">Cut</key>
+		<key name="menu.main.edit.cut.tt">Cut selected area into clipboard</key>
+		<key name="menu.main.edit.copy">Copy</key>
+		<key name="menu.main.edit.copy.tt">Copy selected area into clipboard</key>
+		<key name="menu.main.edit.paste">Paste</key>
+		<key name="menu.main.edit.paste.tt">Paste selected area from clipboard</key>
+		<key name="menu.main.edit.find">Find</key>
+		<key name="menu.main.edit.find.tt">Find string</key>
+		<key name="menu.main.edit.findreplace">Find &amp; Replace</key>
+		<key name="menu.main.edit.findreplace.tt">Find and replace string</key>
+		<key name="menu.main.edit.pasteLink">Insert link</key>
+		<key name="menu.main.edit.pasteLink.tt">Insert link</key>
+		<key name="menu.main.edit.pasteImage">Insert image</key>
+		<key name="menu.main.edit.pasteImage.tt">Insert image</key>
+		<key name="menu.main.edit.captionUp">Caption up</key>
+		<key name="menu.main.edit.captionUp.tt">Caption up</key>
+		<key name="menu.main.edit.captionDown">Caption down</key>
+		<key name="menu.main.edit.captionDown.tt">Caption down</key>
+		<key name="menu.main.edit.listUp">Unordered list up</key>
+		<key name="menu.main.edit.listUp.tt">Unordered list up</key>
+		<key name="menu.main.edit.listDown">Unordered list down</key>
+		<key name="menu.main.edit.listDown.tt">Unordered list down</key>
+		<key name="menu.main.edit.orderedListUp">Ordered list up</key>
+		<key name="menu.main.edit.orderedListUp.tt">Ordered list up</key>
+		<key name="menu.main.edit.orderedListDown">Ordered list down</key>
+		<key name="menu.main.edit.orderedListDown.tt">Ordered list down</key>
+		<key name="menu.main.edit.bold">Bold</key>
+		<key name="menu.main.edit.bold.tt">Bold</key>
+		<key name="menu.main.edit.italic">Italic</key>
+		<key name="menu.main.edit.italic.tt">Italic</key>
+		<key name="menu.main.tools">Tools</key>
+		<key name="menu.main.tools.tt">Manage the application</key>
+		<key name="menu.main.tools.preview">Preview</key>
+		<key name="menu.main.tools.preview.tt">Preview content</key>		
+		<key name="menu.main.tools.settings">Settings</key>
+		<key name="menu.main.tools.settings.tt">Application settings</key>
+		<key name="menu.main.tools.languages">Language</key>
+		<key name="menu.main.tools.languages.tt">Select interface language</key>
+		<key name="menu.main.help">Help</key>
+		<key name="menu.main.help.tt">Help system</key>
+		<key name="menu.main.help.about">About...</key>
+		<key name="menu.main.help.about.tt">Info about the application</key>
+
+<!-- Settings class localization -->
+		<key name="settings.title">Settings</key>
+		<key name="settings.title.tt">Settings</key>
+		<key name="settings.title.help">Settings</key>
+		<key name="settings.cssFile">CSS file</key>
+		<key name="settings.cssFile.tt">CSS file</key>
+
+<!-- Find class localization -->
+		<key name="find.title">Find</key>
+		<key name="find.title.tt">Find</key>
+		<key name="find.title.help">Find</key>
+		<key name="find.button.find">Find</key>
+		<key name="find.button.find.tt">Find</key>
+		<key name="find.string">String to find</key>
+		<key name="find.string.tt">String to find</key>
+		<key name="find.backward">Find backward</key>
+		<key name="find.backward.tt">Find backward</key>
+		<key name="find.wholeWord">Whole words</key>
+		<key name="find.wholeWord.tt">Whole words</key>
+		<key name="find.useRegex">Use regex</key>
+		<key name="find.useRegex.tt">Use regex</key>
+
+<!-- FindReplace class localization  -->
+		<key name="findreplace.title">Find &amp; replace</key>
+		<key name="findreplace.title.tt">Find &amp; replace</key>
+		<key name="findreplace.title.help">Find &amp; replace</key>
+		<key name="findreplace.button.find">Find</key>
+		<key name="findreplace.button.find.tt">Find</key>
+		<key name="findreplace.button.replace">Replace</key>
+		<key name="findreplace.button.replace.tt">Replace</key>
+		<key name="findreplace.button.replaceAll">Replace all</key>
+		<key name="findreplace.button.replaceAll.tt">Replace all</key>
+		<key name="findreplace.string">String to find</key>
+		<key name="findreplace.string.tt">String to find</key>
+		<key name="findreplace.toReplace">Replace to</key>
+		<key name="findreplace.toReplace.tt">Replace to</key>
+		<key name="findreplace.backward">Find backward</key>
+		<key name="findreplace.backward.tt">Find backward</key>
+		<key name="findreplace.wholeWord">Whole words</key>
+		<key name="findreplace.wholeWord.tt">Whole words</key>
+		<key name="findreplace.useRegex">Use regex</key>
+		<key name="findreplace.useRegex.tt">Use regex</key>
+
+<!-- InsertLink class localization  -->
+		<key name="insertlink.title">Insert link</key>
+		<key name="insertlink.title.tt">Insert link</key>
+		<key name="insertlink.title.help">Insert link</key>
+		<key name="insertlink.link">Link</key>
+		<key name="insertlink.link.tt">Link</key>
+		<key name="insertlink.title">Title</key>
+		<key name="insertlink.title.tt">Title</key>
+		 
+	</lang>
+	<lang name="ru">
+<!-- Приложение -->
+		<key name="chav1961.bt.creolenotepad.Application.title">(c) 2023, А.В.Черномырдин. Простой редактор CREOLE V.R.=0.0 %1$s</key>
+		<key name="chav1961.bt.creolenotepad.Application.message.ready">Готово</key>
+		<key name="chav1961.bt.creolenotepad.Application.message.notfound">Не найдено</key>
+		<key name="chav1961.bt.creolenotepad.Application.message.replaced">%1$s строк заменено</key>
+		<key name="chav1961.bt.creolenotepad.Application.message.file.not.exists">Файл (%1$s) не найден и будет удален из списка последних загруженных</key>
+		<key name="chav1961.bt.creolenotepad.Application.message.nocssfound">Пользовательская CSS не задана. Будет использована CSS по умолчанию. Задайте пользовательскую CSS через меню Инструменты-&gt;Настройки</key>
+		<key name="chav1961.bt.creolenotepad.Application.message.cssnotexists">Пользовательская CSS (%1$s) не найдена или недсоутпна для вас. Будет использована CSS по умолчанию.</key>
+		<key name="chav1961.bt.creolenotepad.Application.help.title">О программе</key>
+		<key name="chav1961.bt.creolenotepad.Application.help.content">uri(aboutApplication.cre)</key>
+		
+<!-- Main menu -->
+		<key name="menu.main.file">Файл</key>
+		<key name="menu.main.file.tt">Меню файлов</key>
+		<key name="menu.main.file.new.creole">Новый файл Creole</key>
+		<key name="menu.main.file.new.creole.tt">Создать новый файл Creole</key>
+		<key name="menu.main.file.open">Открыть файл</key>
+		<key name="menu.main.file.open.tt">Открыть существующий файл</key>
+		<key name="menu.main.file.lru">Загрузить последние</key>
+		<key name="menu.main.file.lru.tt">Загрузить ранее использованные файлы</key>		
+		<key name="menu.main.file.save">Сохранить</key>
+		<key name="menu.main.file.save.tt">Сохранить файл</key>
+		<key name="menu.main.file.saveAs">Сохранить как...</key>
+		<key name="menu.main.file.saveAs.tt">Сохранить файл как...</key>
+		<key name="menu.main.file.exit">Выход</key>
+		<key name="menu.main.file.exit.tt">Выход из редактора</key>
+		<key name="menu.main.edit">Правка</key>
+		<key name="menu.main.edit.tt">Правка изображения</key>
+		<key name="menu.main.edit.undo">Отмена</key>
+		<key name="menu.main.edit.undo.tt">Отмена последних операций</key>
+		<key name="menu.main.edit.redo">Восстановить</key>
+		<key name="menu.main.edit.redo.tt">Восстановить последние отмененные операции</key>
+		<key name="menu.main.edit.cut">Вырезать</key>
+		<key name="menu.main.edit.cut.tt">Вырезать выделенный участок изображения</key>
+		<key name="menu.main.edit.copy">Копировать</key>
+		<key name="menu.main.edit.copy.tt">Копировать выделенный участок изображения</key>
+		<key name="menu.main.edit.paste">Вставить</key>
+		<key name="menu.main.edit.paste.tt">Вставить изображение из буфера обмена в выделенную область</key>
+		<key name="menu.main.edit.find">Найти</key>
+		<key name="menu.main.edit.find.tt">Найти строку</key>
+		<key name="menu.main.edit.findreplace">Найти и заменить</key>
+		<key name="menu.main.edit.findreplace.tt">Найти и заменить строки</key>
+		<key name="menu.main.edit.pasteLink">Вставить ссылку</key>
+		<key name="menu.main.edit.pasteLink.tt">Вставить ссылку</key>
+		<key name="menu.main.edit.pasteImage">Вставить изображение</key>
+		<key name="menu.main.edit.pasteImage.tt">Вставить изображение</key>
+		<key name="menu.main.edit.captionUp">Повысить заголовок</key>
+		<key name="menu.main.edit.captionUp.tt">Повысить заголовок</key>
+		<key name="menu.main.edit.captionDown">Понизить заголовок</key>
+		<key name="menu.main.edit.captionDown.tt">Понизить заголовок</key>
+		<key name="menu.main.edit.listUp">Повысить список</key>
+		<key name="menu.main.edit.listUp.tt">Повысить список</key>
+		<key name="menu.main.edit.listDown">Понизить список</key>
+		<key name="menu.main.edit.listDown.tt">Понизить список</key>
+		<key name="menu.main.edit.orderedListUp">Повысить список</key>
+		<key name="menu.main.edit.orderedListUp.tt">Повысить список</key>
+		<key name="menu.main.edit.orderedListDown">Понизить список</key>
+		<key name="menu.main.edit.orderedListDown.tt">Понизить список</key>
+		<key name="menu.main.edit.bold">Жирный шрифт</key>
+		<key name="menu.main.edit.bold.tt">Жирный шрифт</key>
+		<key name="menu.main.edit.italic">Наклонный шрифт</key>
+		<key name="menu.main.edit.italic.tt">Наклонный шрифт</key>
+		<key name="menu.main.tools">Инструменты</key>
+		<key name="menu.main.tools.tt">Управление приложением</key>
+		<key name="menu.main.tools.preview">Скрипты</key>
+		<key name="menu.main.tools.preview.tt">Записать или выполнить скрипт</key>		
+		<key name="menu.main.tools.settings">Настройки</key>
+		<key name="menu.main.tools.settings.tt">Настройки приложения</key>
+		<key name="menu.main.tools.languages">Язык</key>
+		<key name="menu.main.tools.languages.tt">Выбрать язык интерфейса</key>
+		<key name="menu.main.help">Справка</key>
+		<key name="menu.main.help.tt">Справочная система</key>
+		<key name="menu.main.help.about">О программе</key>
+		<key name="menu.main.help.about.tt">Информация о приложении</key>
+
+<!-- Локализация класса Settings -->
+		<key name="settings.title">Настройки</key>
+		<key name="settings.title.tt">Настройки</key>
+		<key name="settings.title.help">Настройки</key>
+		<key name="settings.cssFile">CSS файл</key>
+		<key name="settings.cssFile.tt">CSS файл</key>
+
+<!-- Локализация класса Find -->
+		<key name="find.title">Найти</key>
+		<key name="find.title.tt">Найти</key>
+		<key name="find.title.help">Найти</key>
+		<key name="find.button.find">Найти</key>
+		<key name="find.button.find.tt">Найти</key>
+		<key name="find.string">Строка поиска</key>
+		<key name="find.string.tt">Строка поиска</key>
+		<key name="find.backward">Искать назад</key>
+		<key name="find.backward.tt">Искать назад</key>
+		<key name="find.wholeWord">Только слово целиком</key>
+		<key name="find.wholeWord.tt">Только слово целиком</key>
+		<key name="find.useRegex">Регулярное выражение</key>
+		<key name="find.useRegex.tt">Регулярное выражение</key>
+		
+<!-- Локализация класса FindReplace -->
+		<key name="findreplace.title">Найти и заменить</key>
+		<key name="findreplace.title.tt">Найти и заменить</key>
+		<key name="findreplace.title.help">Найти и заменить</key>
+		<key name="findreplace.button.find">Найти</key>
+		<key name="findreplace.button.find.tt">Найти</key>
+		<key name="findreplace.button.replace">Заменить</key>
+		<key name="findreplace.button.replace.tt">Заменить</key>
+		<key name="findreplace.button.replaceAll">Заменить все</key>
+		<key name="findreplace.button.replaceAll.tt">Заменить все</key>
+		<key name="findreplace.string">Строка поиска</key>
+		<key name="findreplace.string.tt">Строка поиска</key>
+		<key name="findreplace.toReplace">Заменить на</key>
+		<key name="findreplace.toReplace.tt">Заменить на</key>
+		<key name="findreplace.backward">Искать назад</key>
+		<key name="findreplace.backward.tt">Искать назад</key>
+		<key name="findreplace.wholeWord">Только слово целиком</key>
+		<key name="findreplace.wholeWord.tt">Только слово целиком</key>
+		<key name="findreplace.useRegex">Регулярное выражение</key>
+		<key name="findreplace.useRegex.tt">Регулярное выражение</key>
+		
+<!-- Локализация класса InsertLink -->
+		<key name="insertlink.title">Вставить ссылку</key>
+		<key name="insertlink.title.tt">Вставить ссылку</key>
+		<key name="insertlink.title.help">Вставить ссылку</key>
+		<key name="insertlink.link">Ссылка</key>
+		<key name="insertlink.link.tt">Ссылка</key>
+		<key name="insertlink.title">Надпись</key>
+		<key name="insertlink.title.tt">Надпись</key>
+		
+	</lang>
+</localization>
