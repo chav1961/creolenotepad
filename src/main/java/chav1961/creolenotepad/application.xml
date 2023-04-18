@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<app:root xmlns:app="http://ui.purelib.chav1961/">
+	<app:i18n location="i18n:xml:root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/i18n/localization.xml"/>
+ 	<app:menu id="mainmenu">
+		<app:submenu name="menu.main.file" caption="menu.main.file" tooltip="menu.main.file.tt">
+			<app:item name="menu.main.file.new.creole" caption="menu.main.file.new.creole" tooltip="menu.main.file.new.creole.tt" action="newCreoleProject"/>
+			<app:item name="menu.main.file.open" caption="menu.main.file.open" tooltip="menu.main.file.open.tt" action="openProject"/>
+			<app:submenu name="menu.main.file.lru" caption="menu.main.file.lru" tooltip="menu.main.file.lru.tt">
+				<app:separator/>
+			</app:submenu>
+			<app:separator/>
+			<app:item name="menu.main.file.save" caption="menu.main.file.save" tooltip="menu.main.file.save.tt" action="saveProject"/>
+			<app:item name="menu.main.file.saveAs" caption="menu.main.file.saveAs" tooltip="menu.main.file.saveAs.tt" action="saveProjectAs"/>
+			<app:separator/>
+			<app:item name="menu.main.file.exit" caption="menu.main.file.exit" tooltip="menu.main.file.exit.tt" action="exit"/>
+		</app:submenu>
+		<app:submenu name="menu.main.edit" caption="menu.main.edit" tooltip="menu.main.edit.tt">
+			<app:item name="menu.main.edit.undo" caption="menu.main.edit.undo" tooltip="menu.main.edit.undo.tt" action="undo"/>
+			<app:item name="menu.main.edit.redo" caption="menu.main.edit.redo" tooltip="menu.main.edit.redo.tt" action="redo"/>
+			<app:separator/>
+			<app:item name="menu.main.edit.cut" caption="menu.main.edit.cut" tooltip="menu.main.edit.cut.tt" action="cut"/>
+			<app:item name="menu.main.edit.copy" caption="menu.main.edit.copy" tooltip="menu.main.edit.copy.tt" action="copy"/>
+			<app:item name="menu.main.edit.paste" caption="menu.main.edit.paste" tooltip="menu.main.edit.paste.tt" action="paste"/>
+			<app:separator/>
+			<app:item name="menu.main.edit.find" caption="menu.main.edit.find" tooltip="menu.main.edit.find.tt" action="find"/>
+			<app:item name="menu.main.edit.findreplace" caption="menu.main.edit.findreplace" tooltip="menu.main.edit.findreplace.tt" action="findreplace"/>
+		</app:submenu>
+		<app:submenu name="menu.main.tools" caption="menu.main.tools" tooltip="menu.main.tools.tt">
+			<app:item name="menu.main.tools.preview" caption="menu.main.tools.preview" tooltip="menu.main.tools.preview.tt" checkable="true" action="previewProject"/>
+			<app:separator/>
+			<app:item name="menu.main.tools.settings" caption="menu.main.tools.settings" tooltip="menu.main.tools.settings.tt" action="settings"/>
+			<app:builtinSubmenu name="builtin.languages" caption="menu.main.tools.languages" tooltip="menu.main.tools.languages.tt"/>
+		</app:submenu>
+		<app:submenu name="menu.main.help" caption="menu.main.help" tooltip="menu.main.help.tt">
+			<app:item name="menu.main.help.about" caption="menu.main.help.about" tooltip="menu.main.help.about.tt" action="about"/>
+		</app:submenu>
+	</app:menu>
+	<app:keyset id="mainmenu.keyset">
+		<app:key code="N" ctrl="true" action="newCreoleProject"/>
+		<app:key code="O" ctrl="true" action="openProject"/>
+		<app:key code="S" ctrl="true" action="saveProject"/>
+		<app:key code="Q" ctrl="true" action="exit"/>
+		<app:key code="X" ctrl="true" action="cut"/>
+		<app:key code="C" ctrl="true" action="copy"/>
+		<app:key code="V" ctrl="true" action="paste"/>
+		<app:key code="F" ctrl="true" action="find"/>
+		<app:key code="H" ctrl="true" action="findreplace"/>
+		<app:key code="P" ctrl="true" action="previewProject"/>
+		<app:key code="Z" ctrl="true" action="undo"/>
+		<app:key code="Y" ctrl="true" action="redo"/>
+	</app:keyset>
+ 	<app:menu id="toolbarmenu">
+		<app:item name="menu.main.edit.cut" caption="menu.main.edit.cut" tooltip="menu.main.edit.cut.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/cut.png" action="cut"/>
+		<app:item name="menu.main.edit.copy" caption="menu.main.edit.copy" tooltip="menu.main.edit.copy.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/copy.png" action="copy"/>
+		<app:item name="menu.main.edit.paste" caption="menu.main.edit.paste" tooltip="menu.main.edit.paste.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/paste.png" action="paste"/>
+		<app:item name="menu.main.edit.pasteLink" caption="menu.main.edit.pasteLink" tooltip="menu.main.edit.pasteLink.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/insertLink.png" action="pasteLink"/>
+		<app:item name="menu.main.edit.pasteImage" caption="menu.main.edit.pasteImage" tooltip="menu.main.edit.pasteImage.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/insertImage.png" action="pasteImage"/>
+		<app:separator/>
+		<app:item name="menu.main.edit.find" caption="menu.main.edit.find" tooltip="menu.main.edit.find.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/find.png" action="find"/>
+		<app:item name="menu.main.edit.findreplace" caption="menu.main.edit.findreplace" tooltip="menu.main.edit.findreplace.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/findreplace.png" action="findreplace"/>
+		<app:separator/>
+		<app:item name="menu.main.edit.captionUp" caption="menu.main.edit.captionUp" tooltip="menu.main.edit.captionUp.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/caption.png" action="paragraphCaptionUp"/>
+		<app:item name="menu.main.edit.captionDown" caption="menu.main.edit.captionDown" tooltip="menu.main.edit.captionDown.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/caption.png" action="paragraphCaptionDown"/>
+		<app:item name="menu.main.edit.listUp" caption="menu.main.edit.listUp" tooltip="menu.main.edit.listUp.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/bulletList.png" action="paragraphListUp"/>
+		<app:item name="menu.main.edit.listDown" caption="menu.main.edit.listDown" tooltip="menu.main.edit.listDown.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/bulletList.png" action="paragraphListDown"/>
+		<app:item name="menu.main.edit.orderedListUp" caption="menu.main.edit.orderedListUp" tooltip="menu.main.edit.orderedListUp.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/numberedList.png" action="paragraphOrderedListUp"/>
+		<app:item name="menu.main.edit.orderedListDown" caption="menu.main.edit.orderedListDown" tooltip="menu.main.edit.orderedListDown.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/numberedList.png" action="paragraphOrderedListDown"/>
+		<app:item name="menu.main.edit.bold" caption="menu.main.edit.bold" tooltip="menu.main.edit.bold.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/bold.png" action="fontBold"/>
+		<app:item name="menu.main.edit.italic" caption="menu.main.edit.italic" tooltip="menu.main.edit.italic.tt" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/italic.png" action="fontItalic"/>
+		<app:separator/>
+		<app:item name="menu.main.tools.preview" caption="menu.main.tools.preview" tooltip="menu.main.tools.preview.tt" checkable="true" icon="root://chav1961.bt.creolenotepad.Application/chav1961/bt/creolenotepad/preview.png" action="previewProject"/>
+	</app:menu>
+	<app:keyset id="toolbarmenu.keyset">
+		<app:key code="X" ctrl="true" action="cut"/>
+		<app:key code="C" ctrl="true" action="copy"/>
+		<app:key code="V" ctrl="true" action="paste"/>
+		<app:key code="F" ctrl="true" action="find"/>
+		<app:key code="H" ctrl="true" action="findreplace"/>
+		<app:key code="B" ctrl="true" action="fontBold"/>
+		<app:key code="I" ctrl="true" action="fontItalic"/>
+		<app:key code="P" ctrl="true" action="previewProject"/>
+	</app:keyset>
+</app:root>
