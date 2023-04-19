@@ -202,8 +202,6 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	private final JEnableMaskManipulator	emm;
 	private final List<String>				lruFiles = new ArrayList<>();
 	
-	private boolean 						contentModified = false;
-	
 	public Application(final ContentMetadataInterface mdi, final CountDownLatch latch, final File props) throws IOException {
 		if (mdi == null) {
 			throw new NullPointerException("Metadata can't be null");
@@ -241,6 +239,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 
 	        SwingUtils.assignActionListeners(menuBar, this);
 			SwingUtils.assignExitMethod4MainWindow(this, ()->exit());
+			tabs.addChangeListener((e)->changeTab());
 			
 			if (properties.containsKey(PROP_APP_RECTANGLE)) {
 				final String[]	content = properties.getProperty(PROP_APP_RECTANGLE).split("\\s*,\\s*");
@@ -646,6 +645,10 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public void about() {
 		SwingUtils.showAboutScreen(this, localizer, KEY_APPLICATION_HELP_TITLE, KEY_APPLICATION_HELP_CONTENT, URI.create("root://"+getClass().getCanonicalName()+"/chav1961/bt/creolenotepad/avatar.jpg"), new Dimension(640, 400));
 	}
+
+	JFileContentManipulator getFileContentManipulator() {
+		return fcm;
+	}
 	
 	void loadLRU(final String path) {
 		final File	f = new File(path);
@@ -662,13 +665,35 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 			getLogger().message(Severity.warning, KEY_APPLICATION_MESSAGE_FILE_NOT_EXISTS, path);
 		}
 	}
+
+	void removeTab(final int id) {
+		if (getCurrentTab().getFileSupportId() == id) {
+			if (tabs.getSelectedIndex() == 0) {
+				tabs.setSelectedIndex(1);
+			}
+			else {
+				tabs.setSelectedIndex(tabs.getSelectedIndex()-1);
+			}
+		}
+		for(int index = 0; index < tabs.getTabCount(); index++) {
+			if (((CreoleTab)tabs.getSelectedComponent()).getFileSupportId() == id) {
+				tabs.remove(index);
+				break;
+			}
+		}
+	}
+
+	private void changeTab() {
+		fcm.setCurrentFileSupport(getCurrentTab().getFileSupportId());
+	}
 	
 	private CreoleTab getCurrentTab() {
 		return (CreoleTab)tabs.getSelectedComponent();
 	}
 
 	private CreoleTab newTab() {
-		final CreoleTab		tab = new CreoleTab(this, mdi, menuBar);
+		final int			currFileSupport = fcm.appendNewFileSupport();
+		final CreoleTab		tab = new CreoleTab(this, mdi, menuBar, currFileSupport);
 		final JCloseableTab	label = tab.getTabLabel(); 
 		
 		label.associate(tabs, tab);
@@ -677,7 +702,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		tabs.setSelectedIndex(tabs.getTabCount()-1);
 		return tab;
 	}
-	
+
 	private void processLRU(final FileContentChangedEvent<?> event) {
 		switch (event.getChangeType()) {
 			case LRU_LIST_REFRESHED			:
@@ -687,35 +712,33 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		        getCurrentTab().getEditor().setEditable(true);
 		        getCurrentTab().getEditor().setCaret(new DefaultCaret());
 		        getCurrentTab().getEditor().setCaretPosition(0);
-				contentModified = false;
 				emm.setEnableMaskOn(FILE_SAVE_AS | TOTAL_EDIT | TOOLS_PREVIEW);
 				getCurrentTab().clipboardChanged();
 				fillTitle();
 				break;
 			case FILE_STORED 				:
 				fcm.clearModificationFlag();
-				contentModified = false;
 				break;
 			case FILE_STORED_AS 			:
 				fcm.clearModificationFlag();
-				contentModified = false;
 				fillTitle();
 				break;
 			case MODIFICATION_FLAG_CLEAR 	:
 				emm.setEnableMaskOff(FILE_SAVE);
-				contentModified = false;
 				fillTitle();
 				break;
 			case MODIFICATION_FLAG_SET 		:
 				emm.setEnableMaskOn(FILE_SAVE_AS | FILE_SAVE);
-				contentModified = true;
+				fillTitle();
+				break;
+			case FILE_SUPPORT_ID_CHANGED	:
+				emm.setEnableMaskTo(FILE_SAVE_AS | FILE_SAVE, fcm.wasChanged());
 				fillTitle();
 				break;
 			case NEW_FILE_CREATED 			:
 				getCurrentTab().getEditor().setEditable(true);
 				getCurrentTab().getEditor().setCaret(new DefaultCaret());
 				getCurrentTab().getEditor().setCaretPosition(0);
-				contentModified = false;
 				emm.setEnableMaskOn(FILE_SAVE_AS | TOTAL_EDIT | TOOLS_PREVIEW);
 				getCurrentTab().clipboardChanged();
 				fillTitle();
@@ -744,7 +767,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	}
 
 	private void fillTitle() {
-		setTitle(localizer.getValue(KEY_APPLICATION_TITLE, (contentModified ? "* " : "")));
+		setTitle(localizer.getValue(KEY_APPLICATION_TITLE, (fcm.wasChanged() ? "* " : "")));
 	}
 	
 	private void fillLocalizedStrings() {

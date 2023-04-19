@@ -32,7 +32,6 @@ import javax.swing.undo.UndoManager;
 import chav1961.creolenotepad.dialogs.Find;
 import chav1961.creolenotepad.dialogs.FindReplace;
 import chav1961.purelib.basic.PureLibSettings;
-import chav1961.purelib.basic.SubstitutableProperties;
 import chav1961.purelib.basic.interfaces.InputStreamGetter;
 import chav1961.purelib.basic.interfaces.LoggerFacade;
 import chav1961.purelib.basic.interfaces.LoggerFacade.Severity;
@@ -64,6 +63,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	private static final String		KEY_ASK_SAVE_MESSAGE = "chav1961.csce.swing.ProjectTabbedPane.CreoleTab.save.message";	
 	
 	private final Application				app;
+	private final int						fileSupportId;
 	private final CardLayout				cardLayout = new CardLayout();
 	private final JPanel					card = new JPanel(cardLayout);
 	private final UndoManager 				manager = new UndoManager();
@@ -78,10 +78,11 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	private PreviewMode						previewMode = PreviewMode.EDIT;
 	private boolean 						isModified = false;
 	
-	CreoleTab(final Application app, final ContentMetadataInterface mdi, final JMenuBar parentMenu) {
+	CreoleTab(final Application app, final ContentMetadataInterface mdi, final JMenuBar parentMenu, final int fileSupportId) {
 		setLayout(new BorderLayout());
 		
 		this.app = app;
+		this.fileSupportId = fileSupportId;
 		this.toolbar = SwingUtils.toJComponent(mdi.byUIPath(URI.create("ui:/model/navigation.top.toolbarmenu")), JToolBar.class);
 		this.emm = new JEnableMaskManipulator(Application.MENUS, parentMenu, toolbar);
 		this.find = new Find(app.getLogger(), editor);
@@ -114,6 +115,10 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	@Override
 	public LoggerFacade getLogger() {
 		return SwingUtils.getNearestLogger(this);
+	}
+	
+	public int getFileSupportId() {
+		return fileSupportId;
 	}
 	
 	public JCloseableTab getTabLabel() {
@@ -268,22 +273,26 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	}
 	
 	private boolean isModified() {
-		return isModified;
+		return app.getFileContentManipulator().wasChanged();
 	}
 	
 	private void setModified(final boolean modified) {
 		if (isModified != modified) {
 			isModified = modified;
-			tab.setIcon(modified ? SAVE_ICON : GRAY_SAVE_ICON);
+			if (isModified) {
+				app.getFileContentManipulator().setModificationFlag();
+				tab.setIcon(SAVE_ICON);
+			}
+			else {
+				app.getFileContentManipulator().clearModificationFlag();
+				tab.setIcon(GRAY_SAVE_ICON);
+			}
 		}
 	}
 	
 	private void saveContent() {
-		try(final FileSystemInterface	temp = app.getFileSystem().clone().open(tab.getToolTipText());
-			final Writer				wr = temp.charWrite(PureLibSettings.DEFAULT_CONTENT_ENCODING)) {
-
-			wr.write(editor.getText());
-			wr.flush();
+		try{
+			app.getFileContentManipulator().saveFile();
 			setModified(false);
 		} catch (IOException e) {
 			app.getLogger().message(Severity.error, e, e.getLocalizedMessage());
@@ -307,6 +316,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 					case JOptionPane.YES_OPTION		:
 						saveContent();
 					case JOptionPane.NO_OPTION		:
+						app.removeTab(getFileSupportId());
 						return super.closeTab();
 					case JOptionPane.CANCEL_OPTION	:
 						return false;
@@ -315,6 +325,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 				}
 			}
 			else {
+				app.removeTab(getFileSupportId());
 				return super.closeTab();
 			}
 		}
