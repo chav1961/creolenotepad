@@ -39,6 +39,10 @@
 		<key name="menu.main.edit.copy.tt">Copy selected area into clipboard</key>
 		<key name="menu.main.edit.paste">Paste</key>
 		<key name="menu.main.edit.paste.tt">Paste selected area from clipboard</key>
+		<key name="menu.main.edit.pasteLink">Paste link</key>
+		<key name="menu.main.edit.pasteLink.tt">Paste link</key>
+		<key name="menu.main.edit.pasteImage">Paste image</key>
+		<key name="menu.main.edit.pasteImage.tt">Paste link</key>
 		<key name="menu.main.edit.find">Find</key>
 		<key name="menu.main.edit.find.tt">Find string</key>
 		<key name="menu.main.edit.findreplace">Find &amp; Replace</key>

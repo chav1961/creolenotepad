@@ -131,7 +131,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 											MENU_EDIT_ORDERED_ITALIC,
 											MENU_TOOLS_PREVIEW
 										};
-	
+
 	static final long 					FILE_LRU = 1L << 0;
 	static final long 					FILE_SAVE = 1L << 1;
 	static final long 					FILE_SAVE_AS = 1L << 2;
@@ -169,23 +169,6 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		public FilterCallback getFilter() {
 			return filter;
 		}
-		
-		private static FileFormat byFile(final File file) {
-			if (file == null) {
-				throw new NullPointerException("File to define format can't be null");
-			}
-			else {
-				try{for(FileFormat item : values()) {
-					if (item.getFilter().accept(file)) {
-						return item;
-					}
-				}
-				throw new IllegalArgumentException("File ["+file.getAbsolutePath()+"]: unknown file format");
-			} catch (IOException exc) {
-				throw new IllegalArgumentException(exc);
-			}
-			}
-		}
 	}
 	
 	private final ContentMetadataInterface	mdi;
@@ -219,7 +202,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 			this.properties = props.isFile() && props.canRead() ? SubstitutableProperties.of(props) : new SubstitutableProperties();
 			this.localizer = LocalizerFactory.getLocalizer(mdi.getRoot().getLocalizerAssociated());
 			this.menuBar = SwingUtils.toJComponent(mdi.byUIPath(URI.create("ui:/model/navigation.top.mainmenu")), JMenuBar.class);
-			this.emm = new JEnableMaskManipulator(MENUS, menuBar);
+			this.emm = new JEnableMaskManipulator(MENUS, true, menuBar);
 			
 			PureLibSettings.PURELIB_LOCALIZER.push(localizer);
 			PureLibSettings.PURELIB_LOCALIZER.addLocaleChangeListener(this);
@@ -227,7 +210,6 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 			this.state = new JStateString(localizer);
 			this.persistence = LRUPersistence.of(props, LRU_PREFIX);
 			this.fcm = new JFileContentManipulator("system", fsi, localizer, this, this, persistence, lruFiles);
-			this.fcm.setFilters(FileFormat.CREOLE.getFilter());
 			this.fcm.addFileContentChangeListener((e)->processLRU(e));
 			
 			setJMenuBar(menuBar);
@@ -668,23 +650,28 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 
 	void removeTab(final int id) {
 		if (getCurrentTab().getFileSupportId() == id) {
-			if (tabs.getSelectedIndex() == 0) {
-				tabs.setSelectedIndex(1);
-			}
-			else {
-				tabs.setSelectedIndex(tabs.getSelectedIndex()-1);
+			if (tabs.getTabCount() > 1) {
+				if (tabs.getSelectedIndex() == 0) {
+					tabs.setSelectedIndex(1);
+				}
+				else {
+					tabs.setSelectedIndex(tabs.getSelectedIndex()-1);
+				}
 			}
 		}
 		for(int index = 0; index < tabs.getTabCount(); index++) {
 			if (((CreoleTab)tabs.getSelectedComponent()).getFileSupportId() == id) {
 				tabs.remove(index);
+				fcm.removeFileSupport(id);
 				break;
 			}
 		}
 	}
 
 	private void changeTab() {
-		fcm.setCurrentFileSupport(getCurrentTab().getFileSupportId());
+		if (tabs.getTabCount() > 0) {
+			fcm.setCurrentFileSupport(getCurrentTab().getFileSupportId());
+		}
 	}
 	
 	private CreoleTab getCurrentTab() {
@@ -696,10 +683,13 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		final CreoleTab		tab = new CreoleTab(this, mdi, menuBar, currFileSupport);
 		final JCloseableTab	label = tab.getTabLabel(); 
 		
+		fcm.setCurrentFileSupport(currFileSupport);
+		fcm.setFilters(FileFormat.CREOLE.getFilter());
 		label.associate(tabs, tab);
 		tabs.addTab("", tab);
 		tabs.setTabComponentAt(tabs.getTabCount()-1, label);
 		tabs.setSelectedIndex(tabs.getTabCount()-1);
+		label.setText(fcm.getCurrentNameOfTheFile());
 		return tab;
 	}
 
