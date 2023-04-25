@@ -5,6 +5,8 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -84,7 +86,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 		this.app = app;
 		this.fileSupportId = fileSupportId;
 		this.toolbar = SwingUtils.toJComponent(mdi.byUIPath(URI.create("ui:/model/navigation.top.toolbarmenu")), JToolBar.class);
-		this.emm = new JEnableMaskManipulator(Application.MENUS, parentMenu, toolbar);
+		this.emm = new JEnableMaskManipulator(app.getEnableMaskManipulator(), toolbar);
 		this.find = new Find(app.getLogger(), editor);
 		this.findReplace = new FindReplace(app.getLogger(), editor);
 		this.tab = new JCloseableCreoleTab(app.getLocalizer());
@@ -110,6 +112,17 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
         editor.addCaretListener((e)->refreshSelectionMenu());
         Toolkit.getDefaultToolkit().getSystemClipboard().addFlavorListener((e)->clipboardChanged());	        
 		tab.setIcon(GRAY_SAVE_ICON);
+		
+		addComponentListener(new ComponentListener() {
+			@Override public void componentResized(ComponentEvent e) {}
+			@Override public void componentMoved(ComponentEvent e) {}
+			@Override public void componentHidden(ComponentEvent e) {}
+			
+			@Override
+			public void componentShown(ComponentEvent e) {
+				emm.refresh();
+			}
+		});
 	}
 
 	@Override
@@ -229,7 +242,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	}
 	
 	public void clipboardChanged() {
-		try{if (Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.plainTextFlavor) || Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.plainTextFlavor)) {
+		try{if (Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.stringFlavor)) {
 				emm.setEnableMaskOn(Application.EDIT_PASTE);
 			}
 			else {
@@ -241,12 +254,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	}
 
 	public void refreshSelectionMenu() {
-		if (editor.getCaret().getDot() != editor.getCaret().getMark()) {
-			emm.setEnableMaskOn(Application.TOTAL_EDIT_SELECTION);
-		}
-		else {
-			emm.setEnableMaskOff(Application.TOTAL_EDIT_SELECTION);
-		}
+		emm.setEnableMaskTo(Application.TOTAL_EDIT_SELECTION, editor.getCaret().getDot() != editor.getCaret().getMark());
 	}
 
 	@Override
@@ -290,13 +298,16 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 		}
 	}
 	
-	private void saveContent() {
+	boolean saveContent(final boolean saveAs) {
 		try{
-			app.getFileContentManipulator().saveFile();
-			setModified(false);
+			if (saveAs ? app.getFileContentManipulator().saveFileAs() : app.getFileContentManipulator().saveFile()) {
+				setModified(false);
+				return true;
+			}
 		} catch (IOException e) {
 			app.getLogger().message(Severity.error, e, e.getLocalizedMessage());
 		}
+		return false;
 	}
 
 	private class JCloseableCreoleTab extends JCloseableTab {
@@ -314,7 +325,9 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 			if (isModified()) {
 				switch (new JLocalizedOptionPane(localizer).confirm(CreoleTab.this, new LocalizedFormatter(KEY_ASK_SAVE_MESSAGE, tab.getToolTipText()), KEY_ASK_SAVE_TITLE, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION)) {
 					case JOptionPane.YES_OPTION		:
-						saveContent();
+						if (!saveContent(false)) {
+							return false;
+						}
 					case JOptionPane.NO_OPTION		:
 						app.removeTab(getFileSupportId());
 						return super.closeTab();
@@ -333,7 +346,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 		@Override
 		protected void onClickIcon() {
 			if (isModified()) {
-				saveContent();
+				saveContent(false);
 			}
 			else {
 				super.onClickIcon();

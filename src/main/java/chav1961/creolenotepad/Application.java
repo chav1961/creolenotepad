@@ -81,7 +81,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public static final String			KEY_APPLICATION_HELP_TITLE = "chav1961.bt.creolenotepad.Application.help.title";
 	public static final String			KEY_APPLICATION_HELP_CONTENT = "chav1961.bt.creolenotepad.Application.help.content";
 
-	private static final FilterCallback	CREOLE_FILTER = FilterCallback.of("Creole files", "*.cre");
+	private static final FilterCallback	CREOLE_FILTER = FilterCallback.ofWithExtension("Creole files", "cre", "*.cre");
 	private static final FilterCallback	IMAGE_FILTER = FilterCallback.of("Image files", "*.png", "*.jpg");
 
 	private static final String			MENU_FILE_LRU = "menu.main.file.lru";
@@ -211,6 +211,8 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 			this.persistence = LRUPersistence.of(props, LRU_PREFIX);
 			this.fcm = new JFileContentManipulator("system", fsi, localizer, this, this, persistence, lruFiles);
 			this.fcm.addFileContentChangeListener((e)->processLRU(e));
+			this.fcm.setOwner(this);
+			this.fcm.setProgressIndicator(state);
 			
 			setJMenuBar(menuBar);
 			
@@ -232,7 +234,6 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 			else {
 				SwingUtils.centerMainWindow(this, 0.85f);
 			}
-	        emm.setEnableMaskOff(FILE_SAVE | FILE_SAVE_AS | TOTAL_EDIT | TOOLS_PREVIEW);
 	        fillLRU(fcm.getLastUsed());
 
 			fillLocalizedStrings();
@@ -312,18 +313,12 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	
 	@OnAction("action:/saveProject")
 	public void saveProject() {
-		try{fcm.saveFile();
-		} catch (IOException e) {
-			getLogger().message(Severity.error, e, e.getLocalizedMessage());
-		}
+		getCurrentTab().saveContent(false);
 	}
 	
 	@OnAction("action:/saveProjectAs")
 	public void saveProjectAs() {
-		try{fcm.saveFileAs();
-		} catch (IOException e) {
-			getLogger().message(Severity.error, e, e.getLocalizedMessage());
-		}
+		getCurrentTab().saveContent(true);
 	}
 	
 	@OnAction("action:/exit")
@@ -648,6 +643,10 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		}
 	}
 
+	JEnableMaskManipulator getEnableMaskManipulator() {
+		return emm;
+	}
+	
 	void removeTab(final int id) {
 		if (getCurrentTab().getFileSupportId() == id) {
 			if (tabs.getTabCount() > 1) {
@@ -657,6 +656,10 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 				else {
 					tabs.setSelectedIndex(tabs.getSelectedIndex()-1);
 				}
+				fcm.setCurrentFileSupport(getCurrentTab().getFileSupportId());
+			}
+			else {
+				fcm.setCurrentFileSupport(-1);
 			}
 		}
 		for(int index = 0; index < tabs.getTabCount(); index++) {
@@ -665,6 +668,9 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 				fcm.removeFileSupport(id);
 				break;
 			}
+		}
+		if (tabs.getTabCount() == 0) {
+			emm.setEnableMaskOff(TOTAL_EDIT);
 		}
 	}
 
@@ -689,7 +695,6 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		tabs.addTab("", tab);
 		tabs.setTabComponentAt(tabs.getTabCount()-1, label);
 		tabs.setSelectedIndex(tabs.getTabCount()-1);
-		label.setText(fcm.getCurrentNameOfTheFile());
 		return tab;
 	}
 
@@ -718,17 +723,18 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 				fillTitle();
 				break;
 			case MODIFICATION_FLAG_SET 		:
-				emm.setEnableMaskOn(FILE_SAVE_AS | FILE_SAVE);
+				emm.setEnableMaskTo(FILE_SAVE, !fcm.isFileNew());
 				fillTitle();
 				break;
 			case FILE_SUPPORT_ID_CHANGED	:
-				emm.setEnableMaskTo(FILE_SAVE_AS | FILE_SAVE, fcm.wasChanged());
+				emm.setEnableMaskTo(FILE_SAVE, !fcm.isFileNew());
 				fillTitle();
 				break;
 			case NEW_FILE_CREATED 			:
 				getCurrentTab().getEditor().setEditable(true);
 				getCurrentTab().getEditor().setCaret(new DefaultCaret());
 				getCurrentTab().getEditor().setCaretPosition(0);
+				emm.setEnableMaskOff(FILE_SAVE);
 				emm.setEnableMaskOn(FILE_SAVE_AS | TOTAL_EDIT | TOOLS_PREVIEW);
 				getCurrentTab().clipboardChanged();
 				fillTitle();
@@ -758,6 +764,10 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 
 	private void fillTitle() {
 		setTitle(localizer.getValue(KEY_APPLICATION_TITLE, (fcm.wasChanged() ? "* " : "")));
+		if (tabs.getTabCount() > 0) {
+			getCurrentTab().getTabLabel().setText(fcm.getCurrentNameOfTheFile());
+			getCurrentTab().getTabLabel().setToolTipText(fcm.getCurrentPathOfTheFile());
+		}
 	}
 	
 	private void fillLocalizedStrings() {
