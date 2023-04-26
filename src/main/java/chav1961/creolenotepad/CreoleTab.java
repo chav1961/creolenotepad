@@ -127,7 +127,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 
 	@Override
 	public LoggerFacade getLogger() {
-		return SwingUtils.getNearestLogger(this);
+		return SwingUtils.getNearestLogger(getParent());
 	}
 	
 	public int getFileSupportId() {

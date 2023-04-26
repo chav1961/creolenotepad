@@ -67,7 +67,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	private static final long 	serialVersionUID = 1L;
 	
 	public static final String			ARG_PROPFILE_LOCATION = "prop";
-	public static final String			LRU_PREFIX = "lru.";
+	public static final String			LRU_PREFIX = "lru";
 	public static final String			PROP_CSS_FILE = "cssFile";
 	public static final String			PROP_APP_RECTANGLE = "appRectangle";
 	
@@ -277,6 +277,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public void close() throws IOException {
 		final Rectangle	rect = getBounds();
 		
+		properties.tryLoad(props);
 		properties.setProperty(PROP_APP_RECTANGLE, String.format("%1$d,%2$d,%3$d,%4$d", rect.x, rect.y, rect.width, rect.height));
 		properties.store(props);
 		
@@ -324,6 +325,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	@OnAction("action:/exit")
 	public void exit() {
 		try{if (fcm.commit()) {
+				fcm.close();
 				latch.countDown();
 			}
 		} catch (IOException e) {
@@ -728,6 +730,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 				break;
 			case FILE_SUPPORT_ID_CHANGED	:
 				emm.setEnableMaskTo(FILE_SAVE, !fcm.isFileNew());
+				emm.setCheckMaskTo(TOOLS_PREVIEW, tabs.getTabCount() > 0 && getCurrentTab().getPreviewMode() == PreviewMode.VIEW);
 				fillTitle();
 				break;
 			case NEW_FILE_CREATED 			:
