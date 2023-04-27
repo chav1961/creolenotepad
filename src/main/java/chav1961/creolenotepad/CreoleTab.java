@@ -227,18 +227,8 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	}
 	
 	public void refreshUndoMenu() {
-		if (manager.canUndo()) {
-			emm.setEnableMaskOn(Application.EDIT_UNDO);
-		}
-		else {
-			emm.setEnableMaskOff(Application.EDIT_UNDO);
-		}
-		if (manager.canRedo()) {
-			emm.setEnableMaskOn(Application.EDIT_REDO);
-		}
-		else {
-			emm.setEnableMaskOff(Application.EDIT_REDO);
-		}
+		emm.setEnableMaskTo(Application.EDIT_UNDO, manager.canUndo());
+		emm.setEnableMaskTo(Application.EDIT_REDO, manager.canRedo());
 	}
 	
 	public void clipboardChanged() {
