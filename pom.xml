@@ -161,7 +161,7 @@
                             <mainClass>chav1961.creolenotepad.Application</mainClass>
 						</manifest>
                        <manifestEntries>
-                           <SplashScreen-Image>chav1961/creolenotepad/snap.png</SplashScreen-Image>
+                           <SplashScreen-Image>splash.jpg</SplashScreen-Image>
                        </manifestEntries>
 					</archive>
 				</configuration>
