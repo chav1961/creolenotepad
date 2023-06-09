@@ -2,15 +2,15 @@
 <localization xmlns="http://www.i18n.purelib.chav1961.ru/">
 	<lang name="en">
 <!-- Application -->
-		<key name="chav1961.bt.creolenotepad.Application.title">(c) 2023, A.V.Chernomyrdin. Simple CREOLE editor V.R.=0.0 %1$s</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.ready">Ready</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.notfound">Not found</key>		
-		<key name="chav1961.bt.creolenotepad.Application.message.replaced">%1$s items replaced</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.file.not.exists">File (%1$s) is not exists and will be removed from LRU list</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.nocssfound">Custom CSS not defined. Default will be used. Use Tools-&gt;Settings menu to define custom CSS</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.cssnotexists">Custom CSS file(%1$s) is not exists or is not accessible for you. Default will be used.</key>
-		<key name="chav1961.bt.creolenotepad.Application.help.title">About...</key>
-		<key name="chav1961.bt.creolenotepad.Application.help.content">uri(aboutApplication.cre)</key>
+		<key name="chav1961.creolenotepad.Application.title">(c) 2023, A.V.Chernomyrdin. Simple CREOLE editor V.R.=0.0 %1$s</key>
+		<key name="chav1961.creolenotepad.Application.message.ready">Ready</key>
+		<key name="chav1961.creolenotepad.Application.message.notfound">Not found</key>		
+		<key name="chav1961.creolenotepad.Application.message.replaced">%1$s items replaced</key>
+		<key name="chav1961.creolenotepad.Application.message.file.not.exists">File (%1$s) is not exists and will be removed from LRU list</key>
+		<key name="chav1961.creolenotepad.Application.message.nocssfound">Custom CSS not defined. Default will be used. Use Tools-&gt;Settings menu to define custom CSS</key>
+		<key name="chav1961.creolenotepad.Application.message.cssnotexists">Custom CSS file(%1$s) is not exists or is not accessible for you. Default will be used.</key>
+		<key name="chav1961.creolenotepad.Application.help.title">About...</key>
+		<key name="chav1961.creolenotepad.Application.help.content">uri(aboutApplication.cre)</key>
 
 <!-- Main menu -->
 		<key name="menu.main.file">File</key>
@@ -80,6 +80,10 @@
 		<key name="menu.main.help.about">About...</key>
 		<key name="menu.main.help.about.tt">Info about the application</key>
 
+<!-- CreoleTab class localization-->
+		<key name="chav1961.creolenotepad.CreoleTab.save.title">Save file</key>
+		<key name="chav1961.creolenotepad.CreoleTab.save.message">Current file modifications are not saved. Save it</key>
+
 <!-- Settings class localization -->
 		<key name="settings.title">Settings</key>
 		<key name="settings.title.tt">Settings</key>
@@ -135,15 +139,15 @@
 	</lang>
 	<lang name="ru">
 <!-- Приложение -->
-		<key name="chav1961.bt.creolenotepad.Application.title">(c) 2023, А.В.Черномырдин. Простой редактор CREOLE V.R.=0.0 %1$s</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.ready">Готово</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.notfound">Не найдено</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.replaced">%1$s строк заменено</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.file.not.exists">Файл (%1$s) не найден и будет удален из списка последних загруженных</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.nocssfound">Пользовательская CSS не задана. Будет использована CSS по умолчанию. Задайте пользовательскую CSS через меню Инструменты-&gt;Настройки</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.cssnotexists">Пользовательская CSS (%1$s) не найдена или недсоутпна для вас. Будет использована CSS по умолчанию.</key>
-		<key name="chav1961.bt.creolenotepad.Application.help.title">О программе</key>
-		<key name="chav1961.bt.creolenotepad.Application.help.content">uri(aboutApplication.cre)</key>
+		<key name="chav1961.creolenotepad.Application.title">(c) 2023, А.В.Черномырдин. Простой редактор CREOLE V.R.=0.0 %1$s</key>
+		<key name="chav1961.creolenotepad.Application.message.ready">Готово</key>
+		<key name="chav1961.creolenotepad.Application.message.notfound">Не найдено</key>
+		<key name="chav1961.creolenotepad.Application.message.replaced">%1$s строк заменено</key>
+		<key name="chav1961.creolenotepad.Application.message.file.not.exists">Файл (%1$s) не найден и будет удален из списка последних загруженных</key>
+		<key name="chav1961.creolenotepad.Application.message.nocssfound">Пользовательская CSS не задана. Будет использована CSS по умолчанию. Задайте пользовательскую CSS через меню Инструменты-&gt;Настройки</key>
+		<key name="chav1961.creolenotepad.Application.message.cssnotexists">Пользовательская CSS (%1$s) не найдена или недсоутпна для вас. Будет использована CSS по умолчанию.</key>
+		<key name="chav1961.creolenotepad.Application.help.title">О программе</key>
+		<key name="chav1961.creolenotepad.Application.help.content">uri(aboutApplication.cre)</key>
 		
 <!-- Main menu -->
 		<key name="menu.main.file">Файл</key>
@@ -198,8 +202,8 @@
 		<key name="menu.main.edit.italic.tt">Наклонный шрифт</key>
 		<key name="menu.main.tools">Инструменты</key>
 		<key name="menu.main.tools.tt">Управление приложением</key>
-		<key name="menu.main.tools.preview">Скрипты</key>
-		<key name="menu.main.tools.preview.tt">Записать или выполнить скрипт</key>		
+		<key name="menu.main.tools.preview">Просмотр</key>
+		<key name="menu.main.tools.preview.tt">Просмотреть текущий файл в формате *.htlp</key>		
 		<key name="menu.main.tools.settings">Настройки</key>
 		<key name="menu.main.tools.settings.tt">Настройки приложения</key>
 		<key name="menu.main.tools.languages">Язык</key>
@@ -208,6 +212,10 @@
 		<key name="menu.main.help.tt">Справочная система</key>
 		<key name="menu.main.help.about">О программе</key>
 		<key name="menu.main.help.about.tt">Информация о приложении</key>
+
+<!-- Локализация класса CreoleTab -->
+		<key name="chav1961.creolenotepad.CreoleTab.save.title">Сохранить файл</key>
+		<key name="chav1961.creolenotepad.CreoleTab.save.message">Изменения в текущем файле не сохранены. Сохранить их?</key>
 
 <!-- Локализация класса Settings -->
 		<key name="settings.title">Настройки</key>

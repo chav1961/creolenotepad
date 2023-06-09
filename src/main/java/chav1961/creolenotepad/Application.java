@@ -71,15 +71,15 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public static final String			PROP_CSS_FILE = "cssFile";
 	public static final String			PROP_APP_RECTANGLE = "appRectangle";
 	
-	public static final String			KEY_APPLICATION_TITLE = "chav1961.bt.creolenotepad.Application.title";
-	public static final String			KEY_APPLICATION_MESSAGE_READY = "chav1961.bt.creolenotepad.Application.message.ready";
-	public static final String			KEY_APPLICATION_MESSAGE_FILE_NOT_EXISTS = "chav1961.bt.creolenotepad.Application.message.file.not.exists";
-	public static final String			KEY_APPLICATION_MESSAGE_NOT_FOUND = "chav1961.bt.creolenotepad.Application.message.notfound";
-	public static final String			KEY_APPLICATION_MESSAGE_NO_CSS_FOUND = "chav1961.bt.creolenotepad.Application.message.nocssfound";
-	public static final String			KEY_APPLICATION_MESSAGE_CSS_NOT_EXISTS = "chav1961.bt.creolenotepad.Application.message.cssnotexists";
-	public static final String			KEY_APPLICATION_MESSAGE_REPLACED = "chav1961.bt.creolenotepad.Application.message.replaced";
-	public static final String			KEY_APPLICATION_HELP_TITLE = "chav1961.bt.creolenotepad.Application.help.title";
-	public static final String			KEY_APPLICATION_HELP_CONTENT = "chav1961.bt.creolenotepad.Application.help.content";
+	public static final String			KEY_APPLICATION_TITLE = "chav1961.creolenotepad.Application.title";
+	public static final String			KEY_APPLICATION_MESSAGE_READY = "chav1961.creolenotepad.Application.message.ready";
+	public static final String			KEY_APPLICATION_MESSAGE_FILE_NOT_EXISTS = "chav1961.creolenotepad.Application.message.file.not.exists";
+	public static final String			KEY_APPLICATION_MESSAGE_NOT_FOUND = "chav1961.creolenotepad.Application.message.notfound";
+	public static final String			KEY_APPLICATION_MESSAGE_NO_CSS_FOUND = "chav1961.creolenotepad.Application.message.nocssfound";
+	public static final String			KEY_APPLICATION_MESSAGE_CSS_NOT_EXISTS = "chav1961.creolenotepad.Application.message.cssnotexists";
+	public static final String			KEY_APPLICATION_MESSAGE_REPLACED = "chav1961.creolenotepad.Application.message.replaced";
+	public static final String			KEY_APPLICATION_HELP_TITLE = "chav1961.creolenotepad.Application.help.title";
+	public static final String			KEY_APPLICATION_HELP_CONTENT = "chav1961.creolenotepad.Application.help.content";
 
 	private static final FilterCallback	CREOLE_FILTER = FilterCallback.ofWithExtension("Creole files", "cre", "*.cre");
 	private static final FilterCallback	IMAGE_FILTER = FilterCallback.of("Image files", "*.png", "*.jpg");

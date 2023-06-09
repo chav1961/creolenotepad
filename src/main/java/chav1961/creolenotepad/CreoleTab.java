@@ -61,8 +61,8 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	private static final String		PROLOGUE_TEMPLATE = "<html><head><link rel=\"stylesheet\" href=\"%1$s\"></head><body>";
 	private static final Icon		SAVE_ICON = new ImageIcon(CreoleTab.class.getResource("icon_save_16.png"));
 	private static final Icon		GRAY_SAVE_ICON = new ImageIcon(GrayFilter.createDisabledImage(((ImageIcon)SAVE_ICON).getImage()));
-	private static final String		KEY_ASK_SAVE_TITLE = "chav1961.csce.swing.ProjectTabbedPane.CreoleTab.save.title";
-	private static final String		KEY_ASK_SAVE_MESSAGE = "chav1961.csce.swing.ProjectTabbedPane.CreoleTab.save.message";	
+	private static final String		KEY_ASK_SAVE_TITLE = "chav1961.creolenotepad.CreoleTab.save.title";
+	private static final String		KEY_ASK_SAVE_MESSAGE = "chav1961.creolenotepad.CreoleTab.save.message";	
 	
 	private final Application				app;
 	private final int						fileSupportId;
