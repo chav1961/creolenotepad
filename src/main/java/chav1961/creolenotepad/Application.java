@@ -622,7 +622,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	
 	@OnAction("action:/about")
 	public void about() {
-		SwingUtils.showAboutScreen(this, localizer, KEY_APPLICATION_HELP_TITLE, KEY_APPLICATION_HELP_CONTENT, URI.create("root://"+getClass().getCanonicalName()+"/chav1961/bt/creolenotepad/avatar.jpg"), new Dimension(640, 400));
+		SwingUtils.showAboutScreen(this, localizer, KEY_APPLICATION_HELP_TITLE, KEY_APPLICATION_HELP_CONTENT, URI.create("root://"+getClass().getCanonicalName()+"/chav1961/creolenotepad/avatar.jpg"), new Dimension(640, 400));
 	}
 
 	JFileContentManipulator getFileContentManipulator() {
