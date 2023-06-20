@@ -673,6 +673,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		}
 		if (tabs.getTabCount() == 0) {
 			emm.setEnableMaskOff(TOTAL_EDIT);
+			emm.setEnableMaskOff(FILE_SAVE | FILE_SAVE_AS);
 		}
 	}
 
