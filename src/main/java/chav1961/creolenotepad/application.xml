@@ -50,6 +50,8 @@
 		<app:key code="Y" ctrl="true" action="redo"/>
 	</app:keyset>
  	<app:menu id="toolbarmenu">
+		<app:item name="menu.main.edit.microphone" caption="menu.main.edit.microphone" tooltip="menu.main.edit.microphone.tt" checkable="true" icon="root://chav1961.creolenotepad.Application/chav1961/creolenotepad/microphone.png" action="microphone"/>
+		<app:separator/>
 		<app:item name="menu.main.edit.cut" caption="menu.main.edit.cut" tooltip="menu.main.edit.cut.tt" icon="root://chav1961.creolenotepad.Application/chav1961/creolenotepad/cut.png" action="cut"/>
 		<app:item name="menu.main.edit.copy" caption="menu.main.edit.copy" tooltip="menu.main.edit.copy.tt" icon="root://chav1961.creolenotepad.Application/chav1961/creolenotepad/copy.png" action="copy"/>
 		<app:item name="menu.main.edit.paste" caption="menu.main.edit.paste" tooltip="menu.main.edit.paste.tt" icon="root://chav1961.creolenotepad.Application/chav1961/creolenotepad/paste.png" action="paste"/>

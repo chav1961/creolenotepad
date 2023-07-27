@@ -29,6 +29,8 @@
 		<key name="menu.main.file.exit.tt">Exit application</key>
 		<key name="menu.main.edit">Edit</key>
 		<key name="menu.main.edit.tt">Edit image</key>
+		<key name="menu.main.edit.microphone">Enable/disable microphone</key>
+		<key name="menu.main.edit.microphone.tt">Enable/disable microphone</key>
 		<key name="menu.main.edit.undo">Undo</key>
 		<key name="menu.main.edit.undo.tt">Undo last operations</key>
 		<key name="menu.main.edit.redo">Redo</key>
@@ -90,6 +92,10 @@
 		<key name="settings.title.help">Settings</key>
 		<key name="settings.cssFile">CSS file</key>
 		<key name="settings.cssFile.tt">CSS file</key>
+		<key name="settings.ruModelDir">Russian VOSK model directory</key>
+		<key name="settings.ruModelDir.tt">Russian VOSK model directory</key>
+		<key name="settings.enModelDir">English VOSK model directory</key>
+		<key name="settings.enModelDir.tt">English VOSK model directory</key>
 
 <!-- Find class localization -->
 		<key name="find.title">Find</key>
@@ -166,6 +172,8 @@
 		<key name="menu.main.file.exit.tt">Выход из редактора</key>
 		<key name="menu.main.edit">Правка</key>
 		<key name="menu.main.edit.tt">Правка изображения</key>
+		<key name="menu.main.edit.microphone">Микрофон вкл/выкл</key>
+		<key name="menu.main.edit.microphone.tt">Микрофон вкл/выкл</key>
 		<key name="menu.main.edit.undo">Отмена</key>
 		<key name="menu.main.edit.undo.tt">Отмена последних операций</key>
 		<key name="menu.main.edit.redo">Восстановить</key>
@@ -223,6 +231,10 @@
 		<key name="settings.title.help">Настройки</key>
 		<key name="settings.cssFile">CSS файл</key>
 		<key name="settings.cssFile.tt">CSS файл</key>
+		<key name="settings.ruModelDir">Директория русской модели VOSK</key>
+		<key name="settings.ruModelDir.tt">Директория русской модели VOSK</key>
+		<key name="settings.enModelDir">Директория английской модели VOSK</key>
+		<key name="settings.enModelDir.tt">Директория английской модели VOSK</key>
 
 <!-- Локализация класса Find -->
 		<key name="find.title">Найти</key>

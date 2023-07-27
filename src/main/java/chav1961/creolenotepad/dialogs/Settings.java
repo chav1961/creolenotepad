@@ -22,6 +22,14 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 	@LocaleResource(value="settings.cssFile",tooltip="settings.cssFile.tt")
 	@Format("30s")
 	public File			cssFile = new File("./");
+
+	@LocaleResource(value="settings.ruModelDir",tooltip="settings.ruModelDir.tt")
+	@Format("30s")
+	public File			ruModelDir = new File("./");
+
+	@LocaleResource(value="settings.enModelDir",tooltip="settings.enModelDir.tt")
+	@Format("30s")
+	public File			enModelDir = new File("./");
 	
 	public Settings(final LoggerFacade facade, final SubstitutableProperties props) {
 		if (facade == null) {
@@ -33,11 +41,13 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 		else {
 			this.facade = facade;
 			this.cssFile = props.getProperty(Application.PROP_CSS_FILE, File.class, "./");
+			this.ruModelDir = props.getProperty(Application.PROP_RU_MODEL, File.class, "./");
+			this.enModelDir = props.getProperty(Application.PROP_EN_MODEL, File.class, "./");
 		}
 	}
 
 	@Override
-	public RefreshMode onField(Settings inst, Object id, String fieldName, Object oldValue, boolean beforeCommit) throws FlowException, LocalizationException {
+	public RefreshMode onField(final Settings inst, final Object id, final String fieldName, final Object oldValue, final boolean beforeCommit) throws FlowException, LocalizationException {
 		return RefreshMode.DEFAULT;
 	}
 
@@ -47,7 +57,7 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 	}
 
 	@Override
-	public void allowUnnamedModuleAccess(Module... unnamedModules) {
+	public void allowUnnamedModuleAccess(final Module... unnamedModules) {
 		for (Module item : unnamedModules) {
 			this.getClass().getModule().addExports(this.getClass().getPackageName(),item);
 		}
@@ -59,6 +69,18 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 		}
 		else {
 			props.remove(Application.PROP_CSS_FILE);
+		}
+		if (ruModelDir.isDirectory() && ruModelDir.canRead()) {
+			props.setProperty(Application.PROP_RU_MODEL, ruModelDir.getAbsolutePath());
+		}
+		else {
+			props.remove(Application.PROP_RU_MODEL);
+		}
+		if (enModelDir.isDirectory() && enModelDir.canRead()) {
+			props.setProperty(Application.PROP_EN_MODEL, enModelDir.getAbsolutePath());
+		}
+		else {
+			props.remove(Application.PROP_EN_MODEL);
 		}
 	}
 }

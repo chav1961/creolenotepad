@@ -2,6 +2,7 @@ package chav1961.creolenotepad;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
@@ -15,11 +16,16 @@ import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 import javax.swing.text.DefaultCaret;
 
@@ -41,8 +47,8 @@ import chav1961.purelib.fsys.FileSystemFactory;
 import chav1961.purelib.fsys.interfaces.FileSystemInterface;
 import chav1961.purelib.i18n.LocalizerFactory;
 import chav1961.purelib.i18n.interfaces.Localizer;
-import chav1961.purelib.i18n.interfaces.LocalizerOwner;
 import chav1961.purelib.i18n.interfaces.Localizer.LocaleChangeListener;
+import chav1961.purelib.i18n.interfaces.LocalizerOwner;
 import chav1961.purelib.i18n.interfaces.SupportedLanguages;
 import chav1961.purelib.model.ContentModelFactory;
 import chav1961.purelib.model.interfaces.ContentMetadataInterface;
@@ -69,6 +75,8 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public static final String			ARG_PROPFILE_LOCATION = "prop";
 	public static final String			LRU_PREFIX = "lru";
 	public static final String			PROP_CSS_FILE = "cssFile";
+	public static final String			PROP_RU_MODEL = "ruModel";
+	public static final String			PROP_EN_MODEL = "enModel";
 	public static final String			PROP_APP_RECTANGLE = "appRectangle";
 	
 	public static final String			KEY_APPLICATION_TITLE = "chav1961.creolenotepad.Application.title";
@@ -81,6 +89,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public static final String			KEY_APPLICATION_HELP_TITLE = "chav1961.creolenotepad.Application.help.title";
 	public static final String			KEY_APPLICATION_HELP_CONTENT = "chav1961.creolenotepad.Application.help.content";
 
+	private static final Icon			ICON_MICROPHONE = new ImageIcon(Application.class.getResource("microphone16.png"));
 	private static final FilterCallback	CREOLE_FILTER = FilterCallback.ofWithExtension("Creole files", "cre", "*.cre");
 	private static final FilterCallback	IMAGE_FILTER = FilterCallback.of("Image files", "*.png", "*.jpg");
 
@@ -106,6 +115,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	private static final String			MENU_EDIT_ORDERED_BOLD = "menu.main.edit.bold";
 	private static final String			MENU_EDIT_ORDERED_ITALIC = "menu.main.edit.italic";
 	private static final String			MENU_TOOLS_PREVIEW = "menu.main.tools.preview";
+	private static final String			MENU_EDIT_MICROPHONE = "menu.main.edit.microphone";
 
 	static final String[]				MENUS = {
 											MENU_FILE_LRU,
@@ -129,7 +139,8 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 											MENU_EDIT_ORDERED_LIST_DOWN,
 											MENU_EDIT_ORDERED_BOLD,
 											MENU_EDIT_ORDERED_ITALIC,
-											MENU_TOOLS_PREVIEW
+											MENU_TOOLS_PREVIEW,
+											MENU_EDIT_MICROPHONE,
 										};
 
 	static final long 					FILE_LRU = 1L << 0;
@@ -154,6 +165,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	static final long 					EDIT_ORDERED_BOLD = 1L << 19;
 	static final long 					EDIT_ORDERED_ITALIC = 1L << 20;	
 	static final long 					TOOLS_PREVIEW = 1L << 21;
+	static final long 					EDIT_MICROPHONE = 1L << 22;	
 	static final long 					TOTAL_EDIT = EDIT | EDIT_CUT | EDIT_COPY| EDIT_PASTE_LINK | EDIT_PASTE_IMAGE | EDIT_FIND | EDIT_FIND_REPLACE;
 	static final long 					TOTAL_EDIT_SELECTION = EDIT_CAPTION_UP | EDIT_CAPTION_DOWN | EDIT_LIST_UP | EDIT_LIST_DOWN | EDIT_ORDERED_LIST_UP | EDIT_ORDERED_LIST_DOWN | EDIT_ORDERED_BOLD | EDIT_ORDERED_ITALIC;	
 	
@@ -178,12 +190,15 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	private final JMenuBar					menuBar;
 	private final Localizer					localizer;
 	private final JStateString				state;
+	private final JLabel					microphone = new JLabel(ICON_MICROPHONE);
+	private final JLabel					lang = new JLabel(SupportedLanguages.getDefaultLanguage().getIcon());
 	private final FileSystemInterface		fsi = FileSystemFactory.createFileSystem(URI.create("fsys:file:/"));
 	private final LRUPersistence			persistence;
 	private final JFileContentManipulator	fcm;
 	private final JTabbedPane				tabs = new JTabbedPane();
 	private final JEnableMaskManipulator	emm;
 	private final List<String>				lruFiles = new ArrayList<>();
+	private final VoiceParser				vp;
 	
 	public Application(final ContentMetadataInterface mdi, final CountDownLatch latch, final File props) throws IOException {
 		if (mdi == null) {
@@ -201,12 +216,12 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 			this.props = props;
 			this.properties = props.isFile() && props.canRead() ? SubstitutableProperties.of(props) : new SubstitutableProperties();
 			this.localizer = LocalizerFactory.getLocalizer(mdi.getRoot().getLocalizerAssociated());
-			this.menuBar = SwingUtils.toJComponent(mdi.byUIPath(URI.create("ui:/model/navigation.top.mainmenu")), JMenuBar.class);
-			this.emm = new JEnableMaskManipulator(MENUS, true, menuBar);
-			
+
 			PureLibSettings.PURELIB_LOCALIZER.push(localizer);
 			PureLibSettings.PURELIB_LOCALIZER.addLocaleChangeListener(this);
-
+			
+			this.menuBar = SwingUtils.toJComponent(mdi.byUIPath(URI.create("ui:/model/navigation.top.mainmenu")), JMenuBar.class);
+			this.emm = new JEnableMaskManipulator(MENUS, true, menuBar);
 			this.state = new JStateString(localizer);
 			this.persistence = LRUPersistence.of(props, LRU_PREFIX);
 			this.fcm = new JFileContentManipulator("system", fsi, localizer, this, this, persistence, lruFiles);
@@ -215,9 +230,20 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 			this.fcm.setProgressIndicator(state);
 			
 			setJMenuBar(menuBar);
+		
+			final JPanel	southPanel = new JPanel(new BorderLayout());
+			final JPanel	microphoneGroup = new JPanel(new GridLayout(1, 2));
+			
+			microphoneGroup.add(microphone);
+			microphoneGroup.add(lang);
+			southPanel.add(state, BorderLayout.CENTER);
+			southPanel.add(microphoneGroup, BorderLayout.EAST);
+			
+			microphone.setEnabled(false);
+			lang.setEnabled(false);
 			
 			getContentPane().add(tabs, BorderLayout.CENTER);
-			getContentPane().add(state, BorderLayout.SOUTH);
+			getContentPane().add(southPanel, BorderLayout.SOUTH);
 			
 			state.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 
@@ -237,6 +263,31 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	        fillLRU(fcm.getLastUsed());
 
 			fillLocalizedStrings();
+			
+			if (VoiceParser.isMicrophoneExists()) {
+				this.vp = new VoiceParser((s)->getCurrentTab().insertVoice(s), 48000);
+				
+				vp.start();
+				vp.suspend();
+				vp.addExecutionControlListener((e)->{
+					switch (e.getExecutionControlEventType()) {
+						case STARTED : case STOPPED :
+							break;
+						case RESUMED	:
+							SwingUtilities.invokeLater(()->microphone.setEnabled(true));
+							break;
+						case SUSPENDED	:
+							SwingUtilities.invokeLater(()->microphone.setEnabled(false));
+							break;
+						default:
+							throw new UnsupportedOperationException("Execution control type ["+e.getExecutionControlEventType()+"] i not supported yet");
+					}
+				});
+				vp.setModel(SupportedLanguages.en, new File("c:/vosk-model-small-en-us-0.15"));
+			}
+			else {
+				this.vp = null;
+			}			
 		}
 	}
 
@@ -282,6 +333,9 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		properties.store(props);
 		
 		fsi.close();
+		if (vp != null) {
+			vp.close();
+		}
 		PureLibSettings.PURELIB_LOCALIZER.pop(localizer);
 		PureLibSettings.PURELIB_LOCALIZER.removeLocaleChangeListener(this);
 	}
@@ -331,6 +385,11 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		} catch (IOException e) {
 			getLogger().message(Severity.error, e, e.getLocalizedMessage());
 		}
+	}
+
+	@OnAction("action:/microphone")
+	public void microphone(final Hashtable<String,String[]> modes) {
+		getCurrentTab().setMicrophoneEnabled(!getCurrentTab().isMicrophoneEnabled());
 	}
 	
 	@OnAction("action:/undo")
@@ -625,6 +684,14 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		SwingUtils.showAboutScreen(this, localizer, KEY_APPLICATION_HELP_TITLE, KEY_APPLICATION_HELP_CONTENT, URI.create("root://"+getClass().getCanonicalName()+"/chav1961/creolenotepad/avatar.jpg"), new Dimension(640, 400));
 	}
 
+	boolean hasMicrophone() {
+		return vp != null;
+	}
+	
+	VoiceParser getVoiceParser() {
+		return vp;
+	}
+	
 	JFileContentManipulator getFileContentManipulator() {
 		return fcm;
 	}

@@ -7,6 +7,8 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -78,6 +80,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	private final JCloseableTab				tab;
 	
 	private PreviewMode						previewMode = PreviewMode.EDIT;
+	private boolean 						isMicrophoneEnabled = false;
 	private boolean 						isModified = false;
 	
 	CreoleTab(final Application app, final ContentMetadataInterface mdi, final JMenuBar parentMenu, final int fileSupportId) {
@@ -86,7 +89,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 		this.app = app;
 		this.fileSupportId = fileSupportId;
 		this.toolbar = SwingUtils.toJComponent(mdi.byUIPath(URI.create("ui:/model/navigation.top.toolbarmenu")), JToolBar.class);
-		this.emm = new JEnableMaskManipulator(app.getEnableMaskManipulator(), toolbar);
+		this.emm = new JEnableMaskManipulator(app.getEnableMaskManipulator(), Application.EDIT_MICROPHONE, toolbar);
 		this.find = new Find(app.getLogger(), editor);
 		this.findReplace = new FindReplace(app.getLogger(), editor);
 		this.tab = new JCloseableCreoleTab(app.getLocalizer());
@@ -96,6 +99,25 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
         ((JToolBarWithMeta)toolbar).assignAccelerators(viewer);
 		editor.getDocument().addUndoableEditListener((e)->processUndoable(e));
 		editor.getDocument().addDocumentListener((FunctionalDocumentListener)(ct, e)->setModified(true));
+		
+		editor.addKeyListener(new KeyListener() {
+			@Override public void keyTyped(final KeyEvent e) {}
+			
+			@Override
+			public void keyReleased(final KeyEvent e) {
+				if (isMicrophoneEnabled() && !app.getVoiceParser().isSuspended()) {
+					app.getVoiceParser().suspend();
+				}
+			}
+			
+			@Override
+			public void keyPressed(final KeyEvent e) {
+				if (isMicrophoneEnabled() && app.getVoiceParser().isSuspended()) {
+					app.getVoiceParser().resume();
+				}
+			}
+		});
+		
 		manager.discardAllEdits();
 		viewer.setBackground(Color.WHITE);
 		
@@ -123,6 +145,9 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 				emm.refresh();
 			}
 		});
+		
+		emm.setEnableMaskTo(Application.EDIT_MICROPHONE, app.hasMicrophone());
+		emm.setCheckMaskOff(Application.EDIT_MICROPHONE);
 	}
 
 	@Override
@@ -197,19 +222,6 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 		}
 	}
 
-	public long getCurrentMenuEnableState() {
-		return emm.getEnableMask();
-	}
-
-	public long getCurrentMenuCheckState() {
-		return emm.getCheckMask();
-	}
-	
-	public void setCurrentMenuState(final long enableMask, final long checkMask) {
-		emm.setEnableMask(enableMask);
-		emm.setCheckMask(checkMask);
-	}
-
 	public UndoManager getUndoManager() {
 		return manager;
 	}
@@ -261,6 +273,19 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	@Override
 	public InputStream getInputContent() throws IOException {
 		return new ByteArrayInputStream(editor.getText().getBytes(PureLibSettings.DEFAULT_CONTENT_ENCODING));
+	}
+	
+	public boolean isMicrophoneEnabled() {
+		return isMicrophoneEnabled;
+	}
+
+	public void setMicrophoneEnabled(final boolean isMicrophoneEnabled) {
+		this.isMicrophoneEnabled = isMicrophoneEnabled;
+		emm.setCheckMaskTo(Application.EDIT_MICROPHONE, isMicrophoneEnabled);
+	}
+	
+	void insertVoice(final String text) {
+		// TODO Auto-generated method stub
 	}
 	
 	private void processUndoable(final UndoableEditEvent e) {
