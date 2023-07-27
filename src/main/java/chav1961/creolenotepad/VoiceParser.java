@@ -245,9 +245,9 @@ loop:		for (;;) {
 						                if (recognizer.acceptWaveForm(b, length)) {
 						                	callback.accept(toString(recognizer.getResult()));
 						                } 
-//						                else {
-//						                	callback.accept(toString(recognizer.getPartialResult()));
-//						                }
+						                else {
+						                	callback.accept(toString(recognizer.getPartialResult()));
+						                }
 						            }
 				        		}
 			                	callback.accept(toString(recognizer.getFinalResult()));
@@ -271,16 +271,11 @@ loop:		for (;;) {
 
 	
 	private String toString(final String result) {
-		System.err.println("assa: "+result);
 		try {
-			final JsonContent ser = serializer.deserialize(new StringCharSource(result));
-			
-			System.err.println(ser);
+			return serializer.deserialize(new StringCharSource(result)).getContent();
 		} catch (ContentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return "";
 		}
-		return "";
 	}
 
 	static boolean isMicrophoneExists() {

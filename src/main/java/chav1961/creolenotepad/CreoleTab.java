@@ -44,6 +44,7 @@ import chav1961.purelib.basic.interfaces.OutputStreamGetter;
 import chav1961.purelib.enumerations.MarkupOutputFormat;
 import chav1961.purelib.fsys.interfaces.FileSystemInterface;
 import chav1961.purelib.i18n.interfaces.Localizer;
+import chav1961.purelib.i18n.interfaces.SupportedLanguages;
 import chav1961.purelib.model.interfaces.ContentMetadataInterface;
 import chav1961.purelib.streams.char2char.CreoleOutputWriter;
 import chav1961.purelib.streams.char2char.CreoleWriter;
@@ -113,6 +114,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 			@Override
 			public void keyPressed(final KeyEvent e) {
 				if (isMicrophoneEnabled() && app.getVoiceParser().isSuspended()) {
+					app.getVoiceParser().setPreferredLang(SupportedLanguages.of(editor.getInputContext().getLocale()));
 					app.getVoiceParser().resume();
 				}
 			}
@@ -286,6 +288,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	
 	void insertVoice(final String text) {
 		// TODO Auto-generated method stub
+		System.err.println("Voice="+text);
 	}
 	
 	private void processUndoable(final UndoableEditEvent e) {

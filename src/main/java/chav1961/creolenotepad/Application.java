@@ -3,6 +3,7 @@ package chav1961.creolenotepad;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
@@ -191,7 +192,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	private final Localizer					localizer;
 	private final JStateString				state;
 	private final JLabel					microphone = new JLabel(ICON_MICROPHONE);
-	private final JLabel					lang = new JLabel(SupportedLanguages.getDefaultLanguage().getIcon());
+	private final JLabel					lang = new JLabel(scaleIcon(SupportedLanguages.getDefaultLanguage().getIcon(), 16));
 	private final FileSystemInterface		fsi = FileSystemFactory.createFileSystem(URI.create("fsys:file:/"));
 	private final LRUPersistence			persistence;
 	private final JFileContentManipulator	fcm;
@@ -274,15 +275,23 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 						case STARTED : case STOPPED :
 							break;
 						case RESUMED	:
-							SwingUtilities.invokeLater(()->microphone.setEnabled(true));
+							SwingUtilities.invokeLater(()->{
+								lang.setIcon(scaleIcon(getVoiceParser().getPreferredLang().getIcon(), 16));
+								microphone.setEnabled(true);
+								lang.setEnabled(true);
+							});							
 							break;
 						case SUSPENDED	:
-							SwingUtilities.invokeLater(()->microphone.setEnabled(false));
+							SwingUtilities.invokeLater(()->{
+								lang.setEnabled(false);
+								microphone.setEnabled(false);
+							});
 							break;
 						default:
 							throw new UnsupportedOperationException("Execution control type ["+e.getExecutionControlEventType()+"] i not supported yet");
 					}
 				});
+				vp.setModel(SupportedLanguages.ru, new File("c:/vosk-model-small-ru-0.22"));
 				vp.setModel(SupportedLanguages.en, new File("c:/vosk-model-small-en-us-0.15"));
 			}
 			else {
@@ -899,6 +908,13 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		System.exit(retcode);
 	}
 
+	private static Icon scaleIcon(final Icon icon, final int size) {
+		final Image image = ((ImageIcon)icon).getImage(); 
+		final Image newImg = image.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);  
+		
+		return new ImageIcon(newImg); 		
+	}
+	
 	private static class ApplicationArgParser extends ArgParser {
 		private static final ArgParser.AbstractArg[]	KEYS = {
 			new FileArg(ARG_PROPFILE_LOCATION, false, "Property file location", "./.bt.creolenotepad.properties")
