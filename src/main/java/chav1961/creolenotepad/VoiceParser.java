@@ -14,6 +14,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
+import javax.sound.sampled.AudioFormat;
+
 import org.vosk.Model;
 import org.vosk.Recognizer;
 
@@ -28,7 +30,13 @@ import chav1961.purelib.streams.charsource.StringCharSource;
 import chav1961.purelib.streams.interfaces.CharacterSource;
 
 public class VoiceParser implements ListenableExecutionControl, Closeable {
-	private static final String				CAPTURE_URL = "capture://microphone"; 
+	private static final String				CAPTURE_URL = "capture://microphone?rate=48000&bits=16&channels=1&encoding=pcm&signed=signed&endian=big";
+//    public final AudioFormat.Encoding ENCODING = AudioFormat.Encoding.PCM_SIGNED;
+//    public final float RATE = 48000.0f;
+//    public final int CHANNELS = 1;
+//    public final int SAMPLE_SIZE = 16;
+//    public final boolean BIG_ENDIAN = true;
+	
 	
 	private final EnumMap<SupportedLanguages, Model>								models = new EnumMap<>(SupportedLanguages.class);
 	private final LightWeightListenerList<ExecutionControlListener> 				listeners = new LightWeightListenerList<>(ExecutionControlListener.class);
