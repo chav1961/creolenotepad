@@ -106,14 +106,14 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 			
 			@Override
 			public void keyReleased(final KeyEvent e) {
-				if (isMicrophoneEnabled() && !app.getVoiceParser().isSuspended()) {
+				if (e.getKeyCode() == KeyEvent.VK_PAUSE && isMicrophoneEnabled() && !app.getVoiceParser().isSuspended()) {
 					app.getVoiceParser().suspend();
 				}
 			}
 			
 			@Override
 			public void keyPressed(final KeyEvent e) {
-				if (isMicrophoneEnabled() && app.getVoiceParser().isSuspended()) {
+				if (e.getKeyCode() == KeyEvent.VK_PAUSE && isMicrophoneEnabled() && app.getVoiceParser().isSuspended()) {
 					app.getVoiceParser().setPreferredLang(SupportedLanguages.of(editor.getInputContext().getLocale()));
 					app.getVoiceParser().resume();
 				}
