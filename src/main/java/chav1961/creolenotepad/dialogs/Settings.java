@@ -3,6 +3,7 @@ package chav1961.creolenotepad.dialogs;
 import java.io.File;
 
 import chav1961.creolenotepad.Application;
+import chav1961.creolenotepad.interfaces.SupportedSamples;
 import chav1961.purelib.basic.SubstitutableProperties;
 import chav1961.purelib.basic.exceptions.FlowException;
 import chav1961.purelib.basic.exceptions.LocalizationException;
@@ -21,23 +22,23 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 
 	@LocaleResource(value="settings.cssFile",tooltip="settings.cssFile.tt")
 	@Format("30s")
-	public File			cssFile = new File("./");
+	public File				cssFile = new File("./");
 
 	@LocaleResource(value="settings.ruModelDir",tooltip="settings.ruModelDir.tt")
 	@Format("30s")
-	public File			ruModelDir = new File("./");
+	public File				ruModelDir = new File("./");
 
 	@LocaleResource(value="settings.enModelDir",tooltip="settings.enModelDir.tt")
 	@Format("30s")
-	public File			enModelDir = new File("./");
+	public File				enModelDir = new File("./");
 	
 	@LocaleResource(value="settings.togglePause",tooltip="settings.togglePause.tt")
 	@Format("1s")
-	public boolean		togglePause = false;
+	public boolean			togglePause = false;
 
 	@LocaleResource(value="settings.sampleRate",tooltip="settings.sampleRate.tt")
-	@Format("5s")
-	public int			sampleRate = 48000;
+	@Format("5ms")
+	public SupportedSamples	sampleRate = SupportedSamples.S48000;
 	
 	public Settings(final LoggerFacade facade, final SubstitutableProperties props) {
 		if (facade == null) {
@@ -52,7 +53,7 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 			this.ruModelDir = props.getProperty(Application.PROP_RU_MODEL, File.class, "./");
 			this.enModelDir = props.getProperty(Application.PROP_EN_MODEL, File.class, "./");
 			this.togglePause = props.getProperty(Application.PROP_TOGGLE_PAUSE, boolean.class, "false");
-			this.sampleRate = props.getProperty(Application.PROP_SAMPLE_RATE, int.class, "48000");
+			this.sampleRate = SupportedSamples.valueOf(props.getProperty(Application.PROP_SAMPLE_RATE, int.class, Application.PROP_DEFAULT_SAMPLE_RATE));
 		}
 	}
 
@@ -69,7 +70,8 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 	@Override
 	public void allowUnnamedModuleAccess(final Module... unnamedModules) {
 		for (Module item : unnamedModules) {
-			this.getClass().getModule().addExports(this.getClass().getPackageName(),item);
+			this.getClass().getModule().addExports(this.getClass().getPackageName(), item);
+			SupportedSamples.class.getModule().addExports(SupportedSamples.class.getPackageName(), item);
 		}
 	}
 	
@@ -93,6 +95,6 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 			props.remove(Application.PROP_EN_MODEL);
 		}
 		props.setProperty(Application.PROP_TOGGLE_PAUSE, String.valueOf(togglePause));
-		props.setProperty(Application.PROP_SAMPLE_RATE, String.valueOf(sampleRate));
+		props.setProperty(Application.PROP_SAMPLE_RATE, String.valueOf(sampleRate.getSample()));
 	}
 }

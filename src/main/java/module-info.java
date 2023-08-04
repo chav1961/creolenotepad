@@ -7,4 +7,5 @@ module chav1961.creolenotepad {
 	requires com.sun.jna;
 	
 	exports chav1961.creolenotepad to chav1961.purelib;
+	exports chav1961.creolenotepad.interfaces to chav1961.purelib;
 }
