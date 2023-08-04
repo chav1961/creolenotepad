@@ -30,7 +30,7 @@ import chav1961.purelib.streams.charsource.StringCharSource;
 import chav1961.purelib.streams.interfaces.CharacterSource;
 
 public class VoiceParser implements ListenableExecutionControl, Closeable {
-	private static final String				CAPTURE_URL = "capture://microphone?rate=48000&bits=16&channels=1&encoding=pcm&signed=signed&endian=big";
+//	private static final String				CAPTURE_URL = "capture://microphone?rate=48000&bits=16&channels=1&encoding=pcm&signed=signed&endian=big";
 //    public final AudioFormat.Encoding ENCODING = AudioFormat.Encoding.PCM_SIGNED;
 //    public final float RATE = 48000.0f;
 //    public final int CHANNELS = 1;
@@ -56,7 +56,7 @@ public class VoiceParser implements ListenableExecutionControl, Closeable {
 		else if (sampleRate <= 0) {
 			throw new IllegalArgumentException("Sample rate ["+sampleRate+"] must be greater than 0"); 
 		}
-		else if (!isMicrophoneExists()) {
+		else if (!isMicrophoneExists(sampleRate)) {
 			throw new IllegalStateException("Microphone is missing in your system"); 
 		}
 		else {
@@ -235,13 +235,14 @@ loop:		for (;;) {
 						
 						if (m != null) {
 				        	try(final Recognizer	recognizer = new Recognizer(m, sampleRate);
-				        		final Closeable		close = (Closeable)new URL(CAPTURE_URL).openConnection()) {
+				        		final Closeable		close = (Closeable)new URL(getMicrophoneUrl(sampleRate)).openConnection()) {
 				        		final URLConnection	conn = (URLConnection)close;
 				        		int	length;
 				        		
 				        		conn.connect();
 				        		try(final InputStream	is = conn.getInputStream()) {
 						            while (started.get() && !suspended.get() && (length = is.read(b, 0, b.length)) >= 0) {
+						            	System.err.println("LEn="+length);
 						                if (recognizer.acceptWaveForm(b, length)) {
 						                	callback.accept(toString(recognizer.getResult()));
 						                } 
@@ -278,8 +279,12 @@ loop:		for (;;) {
 		}
 	}
 
-	static boolean isMicrophoneExists() {
-		try(final Closeable close = (Closeable) new URL(CAPTURE_URL).openConnection()) {
+	static String getMicrophoneUrl(final int sampleRate) {
+		return "capture://microphone?rate="+sampleRate+"&bits=16&channels=1&encoding=pcm&signed=signed&endian=big";		
+	}
+	
+	static boolean isMicrophoneExists(final int sampleRate) {
+		try(final Closeable close = (Closeable) new URL(getMicrophoneUrl(sampleRate)).openConnection()) {
 			final URLConnection conn = (URLConnection)close; 
 			
 			conn.connect();

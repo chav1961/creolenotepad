@@ -78,7 +78,11 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public static final String			PROP_CSS_FILE = "cssFile";
 	public static final String			PROP_RU_MODEL = "ruModel";
 	public static final String			PROP_EN_MODEL = "enModel";
+	public static final String			PROP_TOGGLE_PAUSE = "togglePause";
+	public static final String			PROP_SAMPLE_RATE = "sampleRate";
 	public static final String			PROP_APP_RECTANGLE = "appRectangle";
+
+	public static final String			PROP_DEFAULT_SAMPLE_RATE = "48000";
 	
 	public static final String			KEY_APPLICATION_TITLE = "chav1961.creolenotepad.Application.title";
 	public static final String			KEY_APPLICATION_MESSAGE_READY = "chav1961.creolenotepad.Application.message.ready";
@@ -265,8 +269,8 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 
 			fillLocalizedStrings();
 			
-			if (VoiceParser.isMicrophoneExists()) {
-				this.vp = new VoiceParser((s)->getCurrentTab().insertVoice(s), 48000);
+			if (VoiceParser.isMicrophoneExists(properties.getProperty(PROP_SAMPLE_RATE, int.class, PROP_DEFAULT_SAMPLE_RATE))) {
+				this.vp = new VoiceParser((s)->getCurrentTab().insertVoice(s), properties.getProperty(PROP_SAMPLE_RATE, int.class, PROP_DEFAULT_SAMPLE_RATE));
 				
 				vp.start();
 				vp.suspend();
@@ -674,7 +678,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public void settings() {
 		final Settings	settings = new Settings(state, properties);
 		
-		try{if (ask(settings, localizer, 300, 50)) {
+		try{if (ask(settings, localizer, 500, 150)) {
 				settings.storeProperties(properties);
 				properties.store(props);
 			}

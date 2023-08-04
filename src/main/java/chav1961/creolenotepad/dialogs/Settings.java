@@ -31,6 +31,14 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 	@Format("30s")
 	public File			enModelDir = new File("./");
 	
+	@LocaleResource(value="settings.togglePause",tooltip="settings.togglePause.tt")
+	@Format("1s")
+	public boolean		togglePause = false;
+
+	@LocaleResource(value="settings.sampleRate",tooltip="settings.sampleRate.tt")
+	@Format("5s")
+	public int			sampleRate = 48000;
+	
 	public Settings(final LoggerFacade facade, final SubstitutableProperties props) {
 		if (facade == null) {
 			throw new NullPointerException("Logger facade can't be null");
@@ -43,6 +51,8 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 			this.cssFile = props.getProperty(Application.PROP_CSS_FILE, File.class, "./");
 			this.ruModelDir = props.getProperty(Application.PROP_RU_MODEL, File.class, "./");
 			this.enModelDir = props.getProperty(Application.PROP_EN_MODEL, File.class, "./");
+			this.togglePause = props.getProperty(Application.PROP_TOGGLE_PAUSE, boolean.class, "false");
+			this.sampleRate = props.getProperty(Application.PROP_SAMPLE_RATE, int.class, "48000");
 		}
 	}
 
@@ -82,5 +92,7 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 		else {
 			props.remove(Application.PROP_EN_MODEL);
 		}
+		props.setProperty(Application.PROP_TOGGLE_PAUSE, String.valueOf(togglePause));
+		props.setProperty(Application.PROP_SAMPLE_RATE, String.valueOf(sampleRate));
 	}
 }

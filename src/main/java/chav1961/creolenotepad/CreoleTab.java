@@ -31,11 +31,13 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.UndoableEditEvent;
+import javax.swing.text.Caret;
 import javax.swing.undo.UndoManager;
 
 import chav1961.creolenotepad.dialogs.Find;
 import chav1961.creolenotepad.dialogs.FindReplace;
 import chav1961.purelib.basic.PureLibSettings;
+import chav1961.purelib.basic.Utils;
 import chav1961.purelib.basic.interfaces.InputStreamGetter;
 import chav1961.purelib.basic.interfaces.LoggerFacade;
 import chav1961.purelib.basic.interfaces.LoggerFacade.Severity;
@@ -102,22 +104,44 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 		editor.getDocument().addDocumentListener((FunctionalDocumentListener)(ct, e)->setModified(true));
 		
 		editor.addKeyListener(new KeyListener() {
-			@Override public void keyTyped(final KeyEvent e) {}
-			
-			@Override
-			public void keyReleased(final KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_PAUSE && isMicrophoneEnabled() && !app.getVoiceParser().isSuspended()) {
-					app.getVoiceParser().suspend();
-				}
-			}
+			boolean pausePressed = false;
 			
 			@Override
 			public void keyPressed(final KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_PAUSE && isMicrophoneEnabled() && app.getVoiceParser().isSuspended()) {
-					app.getVoiceParser().setPreferredLang(SupportedLanguages.of(editor.getInputContext().getLocale()));
-					app.getVoiceParser().resume();
+				if (e.getKeyCode() == KeyEvent.VK_PAUSE && isMicrophoneEnabled()) {
+					if (app.getProperties().getProperty(Application.PROP_TOGGLE_PAUSE, boolean.class, "false")) {
+						if (!pausePressed) {
+							pausePressed = true;
+							if (app.getVoiceParser().isSuspended()) {
+								app.getVoiceParser().setPreferredLang(SupportedLanguages.of(editor.getInputContext().getLocale()));
+								app.getVoiceParser().resume();
+							}
+							else {
+								app.getVoiceParser().suspend();
+							}
+						}
+					}
+					else if (app.getVoiceParser().isSuspended()) {
+						app.getVoiceParser().setPreferredLang(SupportedLanguages.of(editor.getInputContext().getLocale()));
+						app.getVoiceParser().resume();
+					}
 				}
 			}
+			
+			@Override
+			public void keyReleased(final KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_PAUSE && isMicrophoneEnabled()) {
+					if (app.getProperties().getProperty(Application.PROP_TOGGLE_PAUSE, boolean.class, "false")) {
+						pausePressed = false;
+					}
+					else if (!app.getVoiceParser().isSuspended()) {
+						app.getVoiceParser().suspend();
+					}
+				}
+			}
+			
+			@Override public void keyTyped(final KeyEvent e) {}
+
 		});
 		
 		manager.discardAllEdits();
@@ -287,8 +311,16 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	}
 	
 	void insertVoice(final String text) {
-		// TODO Auto-generated method stub
-		System.err.println("Voice="+text);
+		if (!Utils.checkEmptyOrNullString(text)) {
+			final int	from = editor.getSelectionStart();
+			final int	to = editor.getSelectionEnd();
+			
+			editor.setSelectionStart(from);
+			editor.setSelectionEnd(to);
+			editor.replaceSelection(text);
+			editor.setSelectionStart(from);
+			editor.setSelectionEnd(from+text.length());
+		}
 	}
 	
 	private void processUndoable(final UndoableEditEvent e) {

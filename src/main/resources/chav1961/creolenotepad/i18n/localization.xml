@@ -96,6 +96,10 @@
 		<key name="settings.ruModelDir.tt">Russian VOSK model directory</key>
 		<key name="settings.enModelDir">English VOSK model directory</key>
 		<key name="settings.enModelDir.tt">English VOSK model directory</key>
+		<key name="settings.togglePause">Toggle 'Pause' button</key>
+		<key name="settings.togglePause.tt">'Pause' button will be toggled when using voice input from microphone</key>
+		<key name="settings.sampleRate">Microphone sample rate</key>
+		<key name="settings.sampleRate.tt">Microphone sample rate</key>
 
 <!-- Find class localization -->
 		<key name="find.title">Find</key>
@@ -235,6 +239,10 @@
 		<key name="settings.ruModelDir.tt">Директория русской модели VOSK</key>
 		<key name="settings.enModelDir">Директория английской модели VOSK</key>
 		<key name="settings.enModelDir.tt">Директория английской модели VOSK</key>
+		<key name="settings.togglePause">Кнопка 'Pause' вкл/выкл</key>
+		<key name="settings.togglePause.tt">Кнопка 'Pause' включает/выключает режим голосового ввода. Если нет - голосовой ввод работает только при нажатии и удержании кнопки</key>
+		<key name="settings.sampleRate">Скорость оцифровки</key>
+		<key name="settings.sampleRate.tt">Скорость оцифровки микрофона</key>
 
 <!-- Локализация класса Find -->
 		<key name="find.title">Найти</key>
