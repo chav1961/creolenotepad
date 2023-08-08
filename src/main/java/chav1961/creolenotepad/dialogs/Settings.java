@@ -36,9 +36,9 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 	@Format("1s")
 	public boolean			togglePause = false;
 
-	@LocaleResource(value="settings.sampleRate",tooltip="settings.sampleRate.tt")
-	@Format("5ms")
-	public SupportedSamples	sampleRate = SupportedSamples.S48000;
+//	@LocaleResource(value="settings.sampleRate",tooltip="settings.sampleRate.tt")
+//	@Format("5ms")
+	public SupportedSamples	sampleRate = SupportedSamples.S16000;
 	
 	public Settings(final LoggerFacade facade, final SubstitutableProperties props) {
 		if (facade == null) {

@@ -1,9 +1,12 @@
 package chav1961.creolenotepad;
 
+import java.io.BufferedInputStream;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.Thread.State;
 import java.net.URL;
 import java.net.URLConnection;
@@ -15,7 +18,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.TargetDataLine;
 
+import org.vosk.LibVosk;
+import org.vosk.LogLevel;
 import org.vosk.Model;
 import org.vosk.Recognizer;
 
@@ -27,7 +36,6 @@ import chav1961.purelib.concurrent.interfaces.ListenableExecutionControl;
 import chav1961.purelib.i18n.interfaces.SupportedLanguages;
 import chav1961.purelib.json.JsonSerializer;
 import chav1961.purelib.streams.charsource.StringCharSource;
-import chav1961.purelib.streams.interfaces.CharacterSource;
 
 public class VoiceParser implements ListenableExecutionControl, Closeable {
 //	private static final String				CAPTURE_URL = "capture://microphone?rate=48000&bits=16&channels=1&encoding=pcm&signed=signed&endian=big";
@@ -223,9 +231,10 @@ public class VoiceParser implements ListenableExecutionControl, Closeable {
 	}
 
 	private void listen() {
+	    final byte[] 	b = new byte[4096];
+	    
+	    LibVosk.setLogLevel(LogLevel.DEBUG);
 		try {
-	        final byte[] b = new byte[8192];
-	        
 loop:		for (;;) {
 				final ExecutionControlEventType action = queue.take();
 				
@@ -234,23 +243,24 @@ loop:		for (;;) {
 						final Model	m = models.get(getPreferredLang());
 						
 						if (m != null) {
-				        	try(final Recognizer	recognizer = new Recognizer(m, sampleRate);
-				        		final Closeable		close = (Closeable)new URL(getMicrophoneUrl(sampleRate)).openConnection()) {
-				        		final URLConnection	conn = (URLConnection)close;
+							final AudioFormat 	format = new AudioFormat(sampleRate, 16, 1, true, false);
+							final DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+							
+				        	try(final Recognizer		recognizer = new Recognizer(m, sampleRate);
+				        		final TargetDataLine 	microphone = (TargetDataLine)AudioSystem.getLine(info)) {
 				        		int	length;
 				        		
-				        		conn.connect();
-				        		try(final InputStream	is = conn.getInputStream()) {
-						            while (started.get() && !suspended.get() && (length = is.read(b, 0, b.length)) >= 0) {
-						            	System.err.println("LEn="+length);
-						                if (recognizer.acceptWaveForm(b, length)) {
-						                	callback.accept(toString(recognizer.getResult()));
-						                } 
-						                else {
-						                	callback.accept(toString(recognizer.getPartialResult()));
-						                }
-						            }
-				        		}
+							    microphone.open(format);
+							    microphone.start();
+					            while (started.get() && !suspended.get() && (length = microphone.read(b, 0, b.length)) >= 0) {
+					                if (recognizer.acceptWaveForm(b, length)) {
+					                	callback.accept(toString(recognizer.getResult()));
+					                } 
+					                else {
+//					                	callback.accept(toString(recognizer.getPartialResult()));
+					                }
+					            }
+							    microphone.stop();
 			                	callback.accept(toString(recognizer.getFinalResult()));
 				        	}
 						}
@@ -280,7 +290,7 @@ loop:		for (;;) {
 	}
 
 	static String getMicrophoneUrl(final int sampleRate) {
-		return "capture://microphone?rate="+sampleRate+"&bits=16&channels=1&encoding=pcm&signed=signed&endian=big";		
+		return "capture://microphone?rate="+sampleRate+"&bits=16&channels=1&encoding=pcm&signed=signed&endian=little";		
 	}
 	
 	static boolean isMicrophoneExists(final int sampleRate) {

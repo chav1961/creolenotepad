@@ -270,7 +270,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 			fillLocalizedStrings();
 			
 			if (VoiceParser.isMicrophoneExists(properties.getProperty(PROP_SAMPLE_RATE, int.class, PROP_DEFAULT_SAMPLE_RATE))) {
-				this.vp = new VoiceParser((s)->getCurrentTab().insertVoice(s), properties.getProperty(PROP_SAMPLE_RATE, int.class, PROP_DEFAULT_SAMPLE_RATE));
+				this.vp = new VoiceParser((s)->SwingUtilities.invokeLater(()->getCurrentTab().insertVoice(s)), properties.getProperty(PROP_SAMPLE_RATE, int.class, PROP_DEFAULT_SAMPLE_RATE));
 				
 				vp.start();
 				vp.suspend();

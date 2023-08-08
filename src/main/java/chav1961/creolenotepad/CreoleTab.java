@@ -85,6 +85,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	private PreviewMode						previewMode = PreviewMode.EDIT;
 	private boolean 						isMicrophoneEnabled = false;
 	private boolean 						isModified = false;
+	private String							lastInserted = "";
 	
 	CreoleTab(final Application app, final ContentMetadataInterface mdi, final JMenuBar parentMenu, final int fileSupportId) {
 		setLayout(new BorderLayout());
@@ -311,15 +312,17 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	}
 	
 	void insertVoice(final String text) {
-		if (!Utils.checkEmptyOrNullString(text)) {
-			final int	from = editor.getSelectionStart();
-			final int	to = editor.getSelectionEnd();
+		if (!Utils.checkEmptyOrNullString(text) && !lastInserted.equalsIgnoreCase(text)) {
+			final int		from = editor.getSelectionStart();
+			final int		to = editor.getSelectionEnd();
+			final String	selected = editor.getSelectedText() + ' ' + text;
 			
+			lastInserted = text;
 			editor.setSelectionStart(from);
 			editor.setSelectionEnd(to);
-			editor.replaceSelection(text);
+			editor.replaceSelection(selected);
 			editor.setSelectionStart(from);
-			editor.setSelectionEnd(from+text.length());
+			editor.setSelectionEnd(from + selected.length());
 		}
 	}
 	
