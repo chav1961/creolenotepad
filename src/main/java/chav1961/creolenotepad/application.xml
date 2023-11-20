@@ -21,6 +21,7 @@
 			<app:item name="menu.main.edit.cut" caption="menu.main.edit.cut" tooltip="menu.main.edit.cut.tt" action="cut"/>
 			<app:item name="menu.main.edit.copy" caption="menu.main.edit.copy" tooltip="menu.main.edit.copy.tt" action="copy"/>
 			<app:item name="menu.main.edit.paste" caption="menu.main.edit.paste" tooltip="menu.main.edit.paste.tt" action="paste"/>
+			<app:item name="menu.main.edit.ocr" caption="menu.main.edit.ocr" tooltip="menu.main.edit.ocr.tt" action="ocrFile"/>
 			<app:separator/>
 			<app:item name="menu.main.edit.find" caption="menu.main.edit.find" tooltip="menu.main.edit.find.tt" action="find"/>
 			<app:item name="menu.main.edit.findreplace" caption="menu.main.edit.findreplace" tooltip="menu.main.edit.findreplace.tt" action="findreplace"/>
@@ -43,6 +44,7 @@
 		<app:key code="X" ctrl="true" action="cut"/>
 		<app:key code="C" ctrl="true" action="copy"/>
 		<app:key code="V" ctrl="true" action="paste"/>
+		<app:key code="I" ctrl="true" shift="true" action="ocrFile"/>
 		<app:key code="F" ctrl="true" action="find"/>
 		<app:key code="H" ctrl="true" action="findreplace"/>
 		<app:key code="P" ctrl="true" action="previewProject"/>

@@ -5,6 +5,10 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -31,6 +36,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.text.DefaultCaret;
 
 import chav1961.creolenotepad.dialogs.InsertLink;
+import chav1961.creolenotepad.dialogs.OCRSelect;
 import chav1961.creolenotepad.dialogs.Settings;
 import chav1961.purelib.basic.ArgParser;
 import chav1961.purelib.basic.PureLibSettings;
@@ -69,6 +75,8 @@ import chav1961.purelib.ui.swing.useful.JFileSelectionDialog.FilterCallback;
 import chav1961.purelib.ui.swing.useful.JSimpleSplash;
 import chav1961.purelib.ui.swing.useful.JStateString;
 import chav1961.purelib.ui.swing.useful.interfaces.FileContentChangedEvent;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
 
 public class Application extends JFrame implements AutoCloseable, NodeMetadataOwner, LocaleChangeListener, LocalizerOwner, LoggerFacadeOwner, InputStreamGetter, OutputStreamGetter {
 	private static final long 	serialVersionUID = 1L;
@@ -78,6 +86,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public static final String			PROP_CSS_FILE = "cssFile";
 	public static final String			PROP_RU_MODEL = "ruModel";
 	public static final String			PROP_EN_MODEL = "enModel";
+	public static final String			PROP_TESSERACT_MODEL = "tesseractModel";
 	public static final String			PROP_TOGGLE_PAUSE = "togglePause";
 	public static final String			PROP_SAMPLE_RATE = "sampleRate";
 	public static final String			PROP_APP_RECTANGLE = "appRectangle";
@@ -121,6 +130,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	private static final String			MENU_EDIT_ORDERED_ITALIC = "menu.main.edit.italic";
 	private static final String			MENU_TOOLS_PREVIEW = "menu.main.tools.preview";
 	private static final String			MENU_EDIT_MICROPHONE = "menu.main.edit.microphone";
+	private static final String			MENU_EDIT_OCR = "menu.main.edit.ocr";
 
 	static final String[]				MENUS = {
 											MENU_FILE_LRU,
@@ -146,6 +156,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 											MENU_EDIT_ORDERED_ITALIC,
 											MENU_TOOLS_PREVIEW,
 											MENU_EDIT_MICROPHONE,
+											MENU_EDIT_OCR,
 										};
 
 	static final long 					FILE_LRU = 1L << 0;
@@ -171,6 +182,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	static final long 					EDIT_ORDERED_ITALIC = 1L << 20;	
 	static final long 					TOOLS_PREVIEW = 1L << 21;
 	static final long 					EDIT_MICROPHONE = 1L << 22;	
+	static final long 					EDIT_OCR = 1L << 23;	
 	static final long 					TOTAL_EDIT = EDIT | EDIT_CUT | EDIT_COPY| EDIT_PASTE_LINK | EDIT_PASTE_IMAGE | EDIT_FIND | EDIT_FIND_REPLACE;
 	static final long 					TOTAL_EDIT_SELECTION = EDIT_CAPTION_UP | EDIT_CAPTION_DOWN | EDIT_LIST_UP | EDIT_LIST_DOWN | EDIT_ORDERED_LIST_UP | EDIT_ORDERED_LIST_DOWN | EDIT_ORDERED_BOLD | EDIT_ORDERED_ITALIC;	
 	
@@ -404,7 +416,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public void microphone(final Hashtable<String,String[]> modes) {
 		getCurrentTab().setMicrophoneEnabled(!getCurrentTab().isMicrophoneEnabled());
 	}
-	
+
 	@OnAction("action:/undo")
 	public void undo() {
 		if (getCurrentTab().getUndoManager().canUndo()) {
@@ -459,6 +471,25 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		} catch (IOException e) {
 			getLogger().message(Severity.error, e, e.getLocalizedMessage());
 		}		
+	}
+
+	@OnAction("action:/ocrFile")
+	public void ocrFile() {
+		final OCRSelect	select = new OCRSelect(state);
+		
+		try{if (ask(select, localizer, 500, 150)) {
+				if (select.fromClipboard) {
+					if (OCRSelect.isImageInClipboard()) {
+						insertOCR((BufferedImage)Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.imageFlavor), select.lang);
+					}
+				}
+				else if (select.file.exists() && select.file.isFile() && select.file.canRead()) {
+					insertOCR(ImageIO.read(select.file), select.lang);
+				}
+			}
+		} catch (ContentException | IOException | UnsupportedFlavorException e) {
+			getLogger().message(Severity.warning, e, e.getLocalizedMessage());
+		}
 	}
 	
 	@OnAction("action:/find")
@@ -885,6 +916,31 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		t.setDaemon(true);
 		t.start();
 	}
+
+	private void insertOCR(final BufferedImage image, final SupportedLanguages lang) throws IOException {
+		try{
+			final Tesseract	tesseract = new Tesseract();
+			
+			tesseract.setDatapath("d:/tesseract/tessdata");
+			switch (lang) {
+				case en	:
+					tesseract.setLanguage("eng");
+					break;
+				case ru	:
+					tesseract.setLanguage("rus");
+					break;
+				default	:
+					throw new UnsupportedOperationException("Language ["+lang+"] is not supported yet");
+			
+			}
+			tesseract.setPageSegMode(1);
+			tesseract.setOcrEngineMode(1);
+			getCurrentTab().getEditor().replaceSelection(tesseract.doOCR(image));
+		} catch (TesseractException e) {
+			throw new IOException(e);
+		}
+	}
+
 	
 	public static void main(String[] args) {
 		final ArgParser	parser = new ApplicationArgParser();

@@ -31,11 +31,15 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 	@LocaleResource(value="settings.enModelDir",tooltip="settings.enModelDir.tt")
 	@Format("30s")
 	public File				enModelDir = new File("./");
-	
+
 	@LocaleResource(value="settings.togglePause",tooltip="settings.togglePause.tt")
 	@Format("1s")
 	public boolean			togglePause = false;
 
+	@LocaleResource(value="settings.tesseractModelDir",tooltip="settings.tesseractModelDir.tt")
+	@Format("30s")
+	public File				tesseractModelDir = new File("./");
+	
 //	@LocaleResource(value="settings.sampleRate",tooltip="settings.sampleRate.tt")
 //	@Format("5ms")
 	public SupportedSamples	sampleRate = SupportedSamples.S16000;
@@ -52,6 +56,7 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 			this.cssFile = props.getProperty(Application.PROP_CSS_FILE, File.class, "./");
 			this.ruModelDir = props.getProperty(Application.PROP_RU_MODEL, File.class, "./");
 			this.enModelDir = props.getProperty(Application.PROP_EN_MODEL, File.class, "./");
+			this.tesseractModelDir = props.getProperty(Application.PROP_TESSERACT_MODEL, File.class, "./");
 			this.togglePause = props.getProperty(Application.PROP_TOGGLE_PAUSE, boolean.class, "false");
 			this.sampleRate = SupportedSamples.valueOf(props.getProperty(Application.PROP_SAMPLE_RATE, int.class, Application.PROP_DEFAULT_SAMPLE_RATE));
 		}
@@ -93,6 +98,12 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor {
 		}
 		else {
 			props.remove(Application.PROP_EN_MODEL);
+		}
+		if (tesseractModelDir.isDirectory() && tesseractModelDir.canRead()) {
+			props.setProperty(Application.PROP_TESSERACT_MODEL, tesseractModelDir.getAbsolutePath());
+		}
+		else {
+			props.remove(Application.PROP_TESSERACT_MODEL);
 		}
 		props.setProperty(Application.PROP_TOGGLE_PAUSE, String.valueOf(togglePause));
 		props.setProperty(Application.PROP_SAMPLE_RATE, String.valueOf(sampleRate.getSample()));
