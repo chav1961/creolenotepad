@@ -11,13 +11,15 @@ import chav1961.purelib.basic.interfaces.ModuleAccessor;
 import chav1961.purelib.i18n.interfaces.LocaleResource;
 import chav1961.purelib.i18n.interfaces.LocaleResourceLocation;
 import chav1961.purelib.i18n.interfaces.SupportedLanguages;
+import chav1961.purelib.model.interfaces.ContentMetadataInterface.ContentNodeMetadata;
 import chav1961.purelib.ui.interfaces.FormManager;
 import chav1961.purelib.ui.interfaces.Format;
 import chav1961.purelib.ui.interfaces.RefreshMode;
+import chav1961.purelib.ui.interfaces.UIItemState;
 
 @LocaleResourceLocation("i18n:xml:root://chav1961.creolenotepad.dialogs.OCRSelect/chav1961/creolenotepad/i18n/localization.xml")
 @LocaleResource(value="OCRSelect.title",tooltip="OCRSelect.title.tt",help="OCRSelect.title.help")
-public class OCRSelect implements FormManager<Object, OCRSelect>, ModuleAccessor {
+public class OCRSelect implements FormManager<Object, OCRSelect>, ModuleAccessor, UIItemState {
 	private final LoggerFacade	facade; 
 
 	@LocaleResource(value="OCRSelect.file",tooltip="OCRSelect.file.tt")
@@ -43,7 +45,7 @@ public class OCRSelect implements FormManager<Object, OCRSelect>, ModuleAccessor
 	
 	@Override
 	public RefreshMode onField(final OCRSelect inst, final Object id, final String fieldName, final Object oldValue, final boolean beforeCommit) throws FlowException, LocalizationException {
-		return RefreshMode.DEFAULT;
+		return "fromClipboard".equals(fieldName) ? RefreshMode.RECORD_ONLY : RefreshMode.DEFAULT;
 	}
 
 	@Override
@@ -58,6 +60,16 @@ public class OCRSelect implements FormManager<Object, OCRSelect>, ModuleAccessor
 		}
 	}
 
+	@Override
+	public AvailableAndVisible getItemState(final ContentNodeMetadata meta) {
+		switch (meta.getName()) {
+			case "file" :
+				return fromClipboard ? AvailableAndVisible.NOTAVAILABLE : AvailableAndVisible.AVAILABLE;
+			default :
+				return AvailableAndVisible.DEFAULT;
+		}
+	}
+	
 	public static boolean isImageInClipboard() {
 		return Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.imageFlavor);
 	}

@@ -183,7 +183,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	static final long 					TOOLS_PREVIEW = 1L << 21;
 	static final long 					EDIT_MICROPHONE = 1L << 22;	
 	static final long 					EDIT_OCR = 1L << 23;	
-	static final long 					TOTAL_EDIT = EDIT | EDIT_CUT | EDIT_COPY| EDIT_PASTE_LINK | EDIT_PASTE_IMAGE | EDIT_FIND | EDIT_FIND_REPLACE;
+	static final long 					TOTAL_EDIT = EDIT | EDIT_CUT | EDIT_COPY| EDIT_PASTE_LINK | EDIT_PASTE_IMAGE | EDIT_OCR | EDIT_FIND | EDIT_FIND_REPLACE;
 	static final long 					TOTAL_EDIT_SELECTION = EDIT_CAPTION_UP | EDIT_CAPTION_DOWN | EDIT_LIST_UP | EDIT_LIST_DOWN | EDIT_ORDERED_LIST_UP | EDIT_ORDERED_LIST_DOWN | EDIT_ORDERED_BOLD | EDIT_ORDERED_ITALIC;	
 	
 	private static enum FileFormat {
