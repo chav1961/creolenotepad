@@ -477,7 +477,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public void ocrFile() {
 		final OCRSelect	select = new OCRSelect(state);
 		
-		try{if (ask(select, localizer, 500, 150)) {
+		try{if (ask(select, localizer, 450, 120)) {
 				if (select.fromClipboard) {
 					if (OCRSelect.isImageInClipboard()) {
 						insertOCR((BufferedImage)Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.imageFlavor), select.lang);
