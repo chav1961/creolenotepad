@@ -131,6 +131,8 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	private static final String			MENU_TOOLS_PREVIEW = "menu.main.tools.preview";
 	private static final String			MENU_EDIT_MICROPHONE = "menu.main.edit.microphone";
 	private static final String			MENU_EDIT_OCR = "menu.main.edit.ocr";
+	private static final String			MENU_EDIT_OCR_CLIP = "menu.main.edit.ocr.clipboard";
+	private static final String			MENU_EDIT_OCR_FILE = "menu.main.edit.ocr.file";
 
 	static final String[]				MENUS = {
 											MENU_FILE_LRU,
@@ -157,6 +159,8 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 											MENU_TOOLS_PREVIEW,
 											MENU_EDIT_MICROPHONE,
 											MENU_EDIT_OCR,
+											MENU_EDIT_OCR_CLIP,
+											MENU_EDIT_OCR_FILE,
 										};
 
 	static final long 					FILE_LRU = 1L << 0;
@@ -183,6 +187,8 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	static final long 					TOOLS_PREVIEW = 1L << 21;
 	static final long 					EDIT_MICROPHONE = 1L << 22;	
 	static final long 					EDIT_OCR = 1L << 23;	
+	static final long 					EDIT_OCR_CLIP = 1L << 24;	
+	static final long 					EDIT_OCR_FILE = 1L << 25;	
 	static final long 					TOTAL_EDIT = EDIT | EDIT_CUT | EDIT_COPY| EDIT_PASTE_LINK | EDIT_PASTE_IMAGE | EDIT_OCR | EDIT_FIND | EDIT_FIND_REPLACE;
 	static final long 					TOTAL_EDIT_SELECTION = EDIT_CAPTION_UP | EDIT_CAPTION_DOWN | EDIT_LIST_UP | EDIT_LIST_DOWN | EDIT_ORDERED_LIST_UP | EDIT_ORDERED_LIST_DOWN | EDIT_ORDERED_BOLD | EDIT_ORDERED_ITALIC;	
 	
@@ -278,7 +284,9 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 				SwingUtils.centerMainWindow(this, 0.85f);
 			}
 	        fillLRU(fcm.getLastUsed());
-
+	        
+	        Toolkit.getDefaultToolkit().getSystemClipboard().addFlavorListener((e)->flavorChange());
+	        
 			fillLocalizedStrings();
 			
 			if (VoiceParser.isMicrophoneExists(properties.getProperty(PROP_SAMPLE_RATE, int.class, PROP_DEFAULT_SAMPLE_RATE))) {
@@ -313,6 +321,15 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 			else {
 				this.vp = null;
 			}			
+		}
+	}
+
+	private void flavorChange() {
+		if (Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.imageFlavor)) {
+			
+		}
+		else if (Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.stringFlavor)) {
+			
 		}
 	}
 
@@ -473,21 +490,27 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		}		
 	}
 
+	@OnAction("action:/ocrClipboard")
+	public void ocrClipboard() {
+		try{
+			if (OCRSelect.isImageInClipboard()) {
+				insertOCR((BufferedImage)Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.imageFlavor), SupportedLanguages.of(getCurrentTab().getEditor().getLocale()));
+			}
+		} catch (IOException | UnsupportedFlavorException e) {
+			getLogger().message(Severity.warning, e, e.getLocalizedMessage());
+		}
+	}
+	
 	@OnAction("action:/ocrFile")
 	public void ocrFile() {
 		final OCRSelect	select = new OCRSelect(state);
 		
-		try{if (ask(select, localizer, 450, 120)) {
-				if (select.fromClipboard) {
-					if (OCRSelect.isImageInClipboard()) {
-						insertOCR((BufferedImage)Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.imageFlavor), select.lang);
-					}
-				}
-				else if (select.file.exists() && select.file.isFile() && select.file.canRead()) {
+		try{if (ask(select, localizer, 450, 90)) {
+				if (select.file.exists() && select.file.isFile() && select.file.canRead()) {
 					insertOCR(ImageIO.read(select.file), select.lang);
 				}
 			}
-		} catch (ContentException | IOException | UnsupportedFlavorException e) {
+		} catch (ContentException | IOException e) {
 			getLogger().message(Severity.warning, e, e.getLocalizedMessage());
 		}
 	}

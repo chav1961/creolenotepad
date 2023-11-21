@@ -33,6 +33,10 @@
 		<key name="menu.main.edit.microphone.tt">Enable/disable microphone</key>
 		<key name="menu.main.edit.ocr">Image recognition</key>
 		<key name="menu.main.edit.ocr.tt">Image recognition</key>
+		<key name="menu.main.edit.ocr.clipboard">From clipboard</key>
+		<key name="menu.main.edit.ocr.clipboard.tt">From clipboard</key>
+		<key name="menu.main.edit.ocr.file">From file</key>
+		<key name="menu.main.edit.ocr.file.tt">From file</key>
 		<key name="menu.main.edit.undo">Undo</key>
 		<key name="menu.main.edit.undo.tt">Undo last operations</key>
 		<key name="menu.main.edit.redo">Redo</key>
@@ -170,8 +174,6 @@
 		<key name="OCRSelect.title.help">OCR scanned image</key>
 		<key name="OCRSelect.file">Image file to OCR</key>
 		<key name="OCRSelect.file.tt">Image file to OCR</key>
-		<key name="OCRSelect.fromClipboard">Image from clipboard</key>
-		<key name="OCRSelect.fromClipboard.tt">Image from clipboard</key>
 		<key name="OCRSelect.lang">Document language</key>
 		<key name="OCRSelect.lang.tt">Document language</key>
 		 
@@ -207,8 +209,12 @@
 		<key name="menu.main.edit.tt">Правка изображения</key>
 		<key name="menu.main.edit.microphone">Микрофон вкл/выкл</key>
 		<key name="menu.main.edit.microphone.tt">Микрофон вкл/выкл</key>
-		<key name="menu.main.edit.ocr">Распознавание с изображения</key>
+		<key name="menu.main.edit.ocr">Распознать</key>
 		<key name="menu.main.edit.ocr.tt">Распознавание отсканированного текста</key>
+		<key name="menu.main.edit.ocr.clipboard">Из буфера обмена</key>
+		<key name="menu.main.edit.ocr.clipboard.tt">Из буфера обмена</key>
+		<key name="menu.main.edit.ocr.file">Из файла</key>
+		<key name="menu.main.edit.ocr.file.tt">Из файла</key>
 		<key name="menu.main.edit.undo">Отмена</key>
 		<key name="menu.main.edit.undo.tt">Отмена последних операций</key>
 		<key name="menu.main.edit.redo">Восстановить</key>
@@ -342,8 +348,6 @@
 		<key name="OCRSelect.title.help">Распознать отсканированный текст</key>
 		<key name="OCRSelect.file">Файл со сканом</key>
 		<key name="OCRSelect.file.tt">Файл, содержащий отсканированное изображение</key>
-		<key name="OCRSelect.fromClipboard">Из буфера обмена</key>
-		<key name="OCRSelect.fromClipboard.tt">Взять изображение из буфера обмена</key>
 		<key name="OCRSelect.lang">Язык документа</key>
 		<key name="OCRSelect.lang.tt">Язык распознаваемого документа</key>
 		

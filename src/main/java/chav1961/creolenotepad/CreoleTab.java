@@ -29,9 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
 import javax.swing.event.UndoableEditEvent;
-import javax.swing.text.Caret;
 import javax.swing.undo.UndoManager;
 
 import chav1961.creolenotepad.dialogs.Find;
@@ -44,7 +42,6 @@ import chav1961.purelib.basic.interfaces.LoggerFacade.Severity;
 import chav1961.purelib.basic.interfaces.LoggerFacadeOwner;
 import chav1961.purelib.basic.interfaces.OutputStreamGetter;
 import chav1961.purelib.enumerations.MarkupOutputFormat;
-import chav1961.purelib.fsys.interfaces.FileSystemInterface;
 import chav1961.purelib.i18n.interfaces.Localizer;
 import chav1961.purelib.i18n.interfaces.SupportedLanguages;
 import chav1961.purelib.model.interfaces.ContentMetadataInterface;
@@ -159,7 +156,6 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
         editor.setEditable(false);
         viewer.setEditable(false);
         editor.addCaretListener((e)->refreshSelectionMenu());
-        Toolkit.getDefaultToolkit().getSystemClipboard().addFlavorListener((e)->clipboardChanged());	        
 		tab.setIcon(GRAY_SAVE_ICON);
 		
 		addComponentListener(new ComponentListener() {
@@ -277,8 +273,15 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 			else {
 				emm.setEnableMaskOff(Application.EDIT_PASTE);
 			}
+			if (Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.imageFlavor)) {
+				emm.setEnableMaskOn(Application.EDIT_OCR_CLIP);
+			}
+			else {
+				emm.setEnableMaskOff(Application.EDIT_OCR_CLIP);
+			}
 		} catch (IllegalStateException exc) {
 			emm.setEnableMaskOff(Application.EDIT_PASTE);
+			emm.setEnableMaskOff(Application.EDIT_OCR_CLIP);
 		}
 	}
 
