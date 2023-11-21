@@ -958,7 +958,9 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 			}
 			tesseract.setPageSegMode(1);
 			tesseract.setOcrEngineMode(1);
+			getLogger().message(Severity.info, "ORC staring, please wait...");
 			getCurrentTab().getEditor().replaceSelection(tesseract.doOCR(image));
+			getLogger().message(Severity.info, "ORC completed");
 		} catch (TesseractException e) {
 			throw new IOException(e);
 		}
