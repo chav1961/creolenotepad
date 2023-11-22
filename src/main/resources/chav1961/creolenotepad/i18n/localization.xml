@@ -11,6 +11,9 @@
 		<key name="chav1961.creolenotepad.Application.message.cssnotexists">Custom CSS file(%1$s) is not exists or is not accessible for you. Default will be used.</key>
 		<key name="chav1961.creolenotepad.Application.help.title">About...</key>
 		<key name="chav1961.creolenotepad.Application.help.content">uri(aboutApplication.cre)</key>
+		<key name="chav1961.creolenotepad.Application.message.startOCR">OCR Started, please wait...</key>
+		<key name="chav1961.creolenotepad.Application.message.endOCR">OCR completed</key>
+		<key name="chav1961.creolenotepad.Application.message.OCRfailed">OCR failed (%1$s)</key>
 
 <!-- Main menu -->
 		<key name="menu.main.file">File</key>
@@ -189,6 +192,9 @@
 		<key name="chav1961.creolenotepad.Application.message.cssnotexists">Пользовательская CSS (%1$s) не найдена или недсоутпна для вас. Будет использована CSS по умолчанию.</key>
 		<key name="chav1961.creolenotepad.Application.help.title">О программе</key>
 		<key name="chav1961.creolenotepad.Application.help.content">uri(aboutApplication.cre)</key>
+		<key name="chav1961.creolenotepad.Application.message.startOCR">Распознавание запущено, ждите...</key>
+		<key name="chav1961.creolenotepad.Application.message.endOCR">Распознавание выполнено</key>
+		<key name="chav1961.creolenotepad.Application.message.OCRfailed">Ошибка распознавания (%1$s)</key>
 		
 <!-- Main menu -->
 		<key name="menu.main.file">Файл</key>

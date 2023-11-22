@@ -1,6 +1,7 @@
 package chav1961.creolenotepad;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -100,6 +101,9 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public static final String			KEY_APPLICATION_MESSAGE_NO_CSS_FOUND = "chav1961.creolenotepad.Application.message.nocssfound";
 	public static final String			KEY_APPLICATION_MESSAGE_CSS_NOT_EXISTS = "chav1961.creolenotepad.Application.message.cssnotexists";
 	public static final String			KEY_APPLICATION_MESSAGE_REPLACED = "chav1961.creolenotepad.Application.message.replaced";
+	public static final String			KEY_APPLICATION_MESSAGE_START_OCR = "chav1961.creolenotepad.Application.message.startOCR";
+	public static final String			KEY_APPLICATION_MESSAGE_END_OCR = "chav1961.creolenotepad.Application.message.endOCR";
+	public static final String			KEY_APPLICATION_MESSAGE_OCR_FAILED = "chav1961.creolenotepad.Application.message.OCRfailed";
 	public static final String			KEY_APPLICATION_HELP_TITLE = "chav1961.creolenotepad.Application.help.title";
 	public static final String			KEY_APPLICATION_HELP_CONTENT = "chav1961.creolenotepad.Application.help.content";
 
@@ -900,18 +904,6 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		}
 	}
 
-	private void fillTitle() {
-		setTitle(localizer.getValue(KEY_APPLICATION_TITLE, (fcm.wasChanged() ? "* " : "")));
-		if (tabs.getTabCount() > 0) {
-			getCurrentTab().getTabLabel().setText(fcm.getCurrentNameOfTheFile());
-			getCurrentTab().getTabLabel().setToolTipText(fcm.getCurrentPathOfTheFile());
-		}
-	}
-	
-	private void fillLocalizedStrings() {
-		fillTitle();
-	}
-
 	private <T> boolean ask(final T instance, final Localizer localizer, final int width, final int height) throws ContentException {
 		final ContentMetadataInterface	mdi = ContentModelFactory.forAnnotatedClass(instance.getClass());
 		
@@ -941,9 +933,11 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	}
 
 	private void insertOCR(final BufferedImage image, final SupportedLanguages lang) throws IOException {
+		final JCreoleEditor	editor = getCurrentTab().getEditor();
+		final Cursor		oldCursor = editor.getCursor();
+		final Tesseract		tesseract = new Tesseract();
+		
 		try{
-			final Tesseract	tesseract = new Tesseract();
-			
 			tesseract.setDatapath("d:/tesseract/tessdata");
 			switch (lang) {
 				case en	:
@@ -958,15 +952,31 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 			}
 			tesseract.setPageSegMode(1);
 			tesseract.setOcrEngineMode(1);
-			getLogger().message(Severity.info, "ORC staring, please wait...");
-			getCurrentTab().getEditor().replaceSelection(tesseract.doOCR(image));
-			getLogger().message(Severity.info, "ORC completed");
+			
+			getLogger().message(Severity.info, KEY_APPLICATION_MESSAGE_START_OCR);
+			editor.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			editor.replaceSelection(tesseract.doOCR(image));
+			getLogger().message(Severity.info, KEY_APPLICATION_MESSAGE_END_OCR);
 		} catch (TesseractException e) {
+			getLogger().message(Severity.warning, KEY_APPLICATION_MESSAGE_OCR_FAILED, e.getLocalizedMessage());
 			throw new IOException(e);
+		} finally {
+			editor.setCursor(oldCursor);
 		}
 	}
-
 	
+	private void fillTitle() {
+		setTitle(localizer.getValue(KEY_APPLICATION_TITLE, (fcm.wasChanged() ? "* " : "")));
+		if (tabs.getTabCount() > 0) {
+			getCurrentTab().getTabLabel().setText(fcm.getCurrentNameOfTheFile());
+			getCurrentTab().getTabLabel().setToolTipText(fcm.getCurrentPathOfTheFile());
+		}
+	}
+	
+	private void fillLocalizedStrings() {
+		fillTitle();
+	}
+
 	public static void main(String[] args) {
 		final ArgParser	parser = new ApplicationArgParser();
 		int				retcode = 0;
