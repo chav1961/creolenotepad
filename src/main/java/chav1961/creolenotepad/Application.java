@@ -101,9 +101,6 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public static final String			KEY_APPLICATION_MESSAGE_NO_CSS_FOUND = "chav1961.creolenotepad.Application.message.nocssfound";
 	public static final String			KEY_APPLICATION_MESSAGE_CSS_NOT_EXISTS = "chav1961.creolenotepad.Application.message.cssnotexists";
 	public static final String			KEY_APPLICATION_MESSAGE_REPLACED = "chav1961.creolenotepad.Application.message.replaced";
-	public static final String			KEY_APPLICATION_MESSAGE_START_OCR = "chav1961.creolenotepad.Application.message.startOCR";
-	public static final String			KEY_APPLICATION_MESSAGE_END_OCR = "chav1961.creolenotepad.Application.message.endOCR";
-	public static final String			KEY_APPLICATION_MESSAGE_OCR_FAILED = "chav1961.creolenotepad.Application.message.OCRfailed";
 	public static final String			KEY_APPLICATION_HELP_TITLE = "chav1961.creolenotepad.Application.help.title";
 	public static final String			KEY_APPLICATION_HELP_CONTENT = "chav1961.creolenotepad.Application.help.content";
 
@@ -498,7 +495,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public void ocrClipboard() {
 		try{
 			if (OCRSelect.isImageInClipboard()) {
-				insertOCR((BufferedImage)Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.imageFlavor), SupportedLanguages.of(getCurrentTab().getEditor().getLocale()));
+				getCurrentTab().insertOCR((BufferedImage)Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.imageFlavor), SupportedLanguages.of(getCurrentTab().getEditor().getLocale()));
 			}
 		} catch (IOException | UnsupportedFlavorException e) {
 			getLogger().message(Severity.warning, e, e.getLocalizedMessage());
@@ -511,7 +508,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		
 		try{if (ask(select, localizer, 450, 90)) {
 				if (select.file.exists() && select.file.isFile() && select.file.canRead()) {
-					insertOCR(ImageIO.read(select.file), select.lang);
+					getCurrentTab().insertOCR(ImageIO.read(select.file), select.lang);
 				}
 			}
 		} catch (ContentException | IOException e) {
@@ -932,39 +929,6 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		t.start();
 	}
 
-	private void insertOCR(final BufferedImage image, final SupportedLanguages lang) throws IOException {
-		final JCreoleEditor	editor = getCurrentTab().getEditor();
-		final Cursor		oldCursor = editor.getCursor();
-		final Tesseract		tesseract = new Tesseract();
-		
-		try{
-			tesseract.setDatapath("d:/tesseract/tessdata");
-			switch (lang) {
-				case en	:
-					tesseract.setLanguage("eng");
-					break;
-				case ru	:
-					tesseract.setLanguage("rus");
-					break;
-				default	:
-					throw new UnsupportedOperationException("Language ["+lang+"] is not supported yet");
-			
-			}
-			tesseract.setPageSegMode(1);
-			tesseract.setOcrEngineMode(1);
-			
-			getLogger().message(Severity.info, KEY_APPLICATION_MESSAGE_START_OCR);
-			editor.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			editor.replaceSelection(tesseract.doOCR(image));
-			getLogger().message(Severity.info, KEY_APPLICATION_MESSAGE_END_OCR);
-		} catch (TesseractException e) {
-			getLogger().message(Severity.warning, KEY_APPLICATION_MESSAGE_OCR_FAILED, e.getLocalizedMessage());
-			throw new IOException(e);
-		} finally {
-			editor.setCursor(oldCursor);
-		}
-	}
-	
 	private void fillTitle() {
 		setTitle(localizer.getValue(KEY_APPLICATION_TITLE, (fcm.wasChanged() ? "* " : "")));
 		if (tabs.getTabCount() > 0) {

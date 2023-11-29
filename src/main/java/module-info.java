@@ -6,6 +6,8 @@ module chav1961.creolenotepad {
 	requires transitive vosk;
 	requires com.sun.jna;
 	requires tess4j;
+	requires simplemagic;
+	requires com.github.albfernandez.juniversalchardet;
 	
 	exports chav1961.creolenotepad to chav1961.purelib;
 	exports chav1961.creolenotepad.interfaces to chav1961.purelib;

@@ -3,22 +3,36 @@ package chav1961.creolenotepad;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URI;
+import java.nio.charset.Charset;
+import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.GrayFilter;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -31,6 +45,10 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoManager;
+
+import org.mozilla.universalchardet.UniversalDetector;
+
+import com.j256.simplemagic.ContentType;
 
 import chav1961.creolenotepad.dialogs.Find;
 import chav1961.creolenotepad.dialogs.FindReplace;
@@ -56,6 +74,8 @@ import chav1961.purelib.ui.swing.useful.JCreoleEditor;
 import chav1961.purelib.ui.swing.useful.JEnableMaskManipulator;
 import chav1961.purelib.ui.swing.useful.JLocalizedOptionPane;
 import chav1961.purelib.ui.swing.useful.LocalizedFormatter;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
 
 class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, OutputStreamGetter {
 	private static final long serialVersionUID = -6709758784195051007L;
@@ -65,6 +85,10 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	private static final Icon		GRAY_SAVE_ICON = new ImageIcon(GrayFilter.createDisabledImage(((ImageIcon)SAVE_ICON).getImage()));
 	private static final String		KEY_ASK_SAVE_TITLE = "chav1961.creolenotepad.CreoleTab.save.title";
 	private static final String		KEY_ASK_SAVE_MESSAGE = "chav1961.creolenotepad.CreoleTab.save.message";	
+	public static final String		KEY_MESSAGE_START_OCR = "chav1961.creolenotepad.CreoleTab.message.startOCR";
+	public static final String		KEY_MESSAGE_END_OCR = "chav1961.creolenotepad.CreoleTab.message.endOCR";
+	public static final String		KEY_MESSAGE_OCR_FAILED = "chav1961.creolenotepad.CreoleTab.message.OCRfailed";
+	public static final String		KEY_MESSAGE_LOAD_FAILED = "chav1961.creolenotepad.CreoleTab.message.loadFailed";
 	
 	private final Application				app;
 	private final int						fileSupportId;
@@ -100,6 +124,42 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
         ((JToolBarWithMeta)toolbar).assignAccelerators(viewer);
 		editor.getDocument().addUndoableEditListener((e)->processUndoable(e));
 		editor.getDocument().addDocumentListener((FunctionalDocumentListener)(ct, e)->setModified(true));
+		
+		new DropTarget(editor,new DropTargetListener() {
+				@Override public void dragEnter(final DropTargetDragEvent dtde) {}
+				@Override public void dragOver(final DropTargetDragEvent dtde) {}
+				@Override public void dropActionChanged(final DropTargetDragEvent dtde) {}
+				@Override public void dragExit(final DropTargetEvent dte) {}
+				
+				@Override
+				public void drop(final DropTargetDropEvent dtde) {
+					if (dtde.getTransferable().isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+						boolean	anyLoaded = false;
+						
+						try {
+							for (File f : (List<File>) dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor)) {
+								if (f.isFile() && f.getName().contains(".")) {
+									final ContentType 	type = ContentType.fromFileExtension(f.getName().substring(f.getName().lastIndexOf('.')+1));
+									
+									if (type.getMimeType().startsWith("text")) {
+										loadTextContent(f);
+										anyLoaded = true;
+									}
+									else if (type.getMimeType().startsWith("image")) {
+										loadImageContent(f);
+										anyLoaded = true;
+									}
+								}
+							}
+						} catch (UnsupportedFlavorException | IOException e) {
+							getLogger().message(Severity.warning, e.getLocalizedMessage());
+						}
+						if (anyLoaded) {
+		                    dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+						}
+					}
+				}
+	        });		
 		
 		editor.addKeyListener(new KeyListener() {
 			boolean pausePressed = false;
@@ -314,6 +374,38 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 		emm.setCheckMaskTo(Application.EDIT_MICROPHONE, isMicrophoneEnabled);
 	}
 	
+	void insertOCR(final BufferedImage image, final SupportedLanguages lang) throws IOException {
+		final Cursor		oldCursor = editor.getCursor();
+		final Tesseract		tesseract = new Tesseract();
+		
+		try{
+			tesseract.setDatapath("d:/tesseract/tessdata");
+			switch (lang) {
+				case en	:
+					tesseract.setLanguage("eng");
+					break;
+				case ru	:
+					tesseract.setLanguage("rus");
+					break;
+				default	:
+					throw new UnsupportedOperationException("Language ["+lang+"] is not supported yet");
+			
+			}
+			tesseract.setPageSegMode(1);
+			tesseract.setOcrEngineMode(1);
+			
+			getLogger().message(Severity.info, KEY_MESSAGE_START_OCR);
+			editor.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			editor.replaceSelection(tesseract.doOCR(image));
+			getLogger().message(Severity.info, KEY_MESSAGE_END_OCR);
+		} catch (TesseractException e) {
+			getLogger().message(Severity.warning, KEY_MESSAGE_OCR_FAILED, "", e.getLocalizedMessage());
+			throw new IOException(e);
+		} finally {
+			editor.setCursor(oldCursor);
+		}
+	}
+
 	void insertVoice(final String text) {
 		if (!Utils.checkEmptyOrNullString(text) && !lastInserted.equalsIgnoreCase(text)) {
 			final int		from = editor.getSelectionStart();
@@ -327,6 +419,18 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 			editor.setSelectionStart(from);
 			editor.setSelectionEnd(from + selected.length());
 		}
+	}
+
+	boolean saveContent(final boolean saveAs) {
+		try{
+			if (saveAs ? app.getFileContentManipulator().saveFileAs() : app.getFileContentManipulator().saveFile()) {
+				setModified(false);
+				return true;
+			}
+		} catch (IOException e) {
+			app.getLogger().message(Severity.error, e, e.getLocalizedMessage());
+		}
+		return false;
 	}
 	
 	private void processUndoable(final UndoableEditEvent e) {
@@ -353,19 +457,27 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 			}
 		}
 	}
-	
-	boolean saveContent(final boolean saveAs) {
-		try{
-			if (saveAs ? app.getFileContentManipulator().saveFileAs() : app.getFileContentManipulator().saveFile()) {
-				setModified(false);
-				return true;
-			}
-		} catch (IOException e) {
-			app.getLogger().message(Severity.error, e, e.getLocalizedMessage());
-		}
-		return false;
-	}
 
+	private void loadTextContent(final File textFile) {
+		try{
+			final String 		encoding = UniversalDetector.detectCharset(textFile);
+		
+			try(final Reader	rdr = new FileReader(textFile, Utils.checkEmptyOrNullString(encoding) ? Charset.defaultCharset() : Charset.forName(encoding))) {
+				editor.replaceSelection(Utils.fromResource(rdr));
+			}
+		} catch (IOException exc) {
+			getLogger().message(Severity.warning, KEY_MESSAGE_OCR_FAILED, textFile.getAbsolutePath(), exc.getLocalizedMessage());
+		}
+	}
+	
+	private void loadImageContent(final File imageFile) {
+		try {
+			insertOCR(ImageIO.read(imageFile), SupportedLanguages.of(editor.getLocale()));
+		} catch (IOException exc) {
+			getLogger().message(Severity.warning, KEY_MESSAGE_OCR_FAILED, imageFile.getAbsolutePath(), exc.getLocalizedMessage());
+		}
+	}
+	
 	private class JCloseableCreoleTab extends JCloseableTab {
 		private static final long serialVersionUID = 7933685864528960962L;
 

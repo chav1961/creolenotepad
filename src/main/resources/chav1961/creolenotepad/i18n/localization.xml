@@ -11,9 +11,6 @@
 		<key name="chav1961.creolenotepad.Application.message.cssnotexists">Custom CSS file(%1$s) is not exists or is not accessible for you. Default will be used.</key>
 		<key name="chav1961.creolenotepad.Application.help.title">About...</key>
 		<key name="chav1961.creolenotepad.Application.help.content">uri(aboutApplication.cre)</key>
-		<key name="chav1961.creolenotepad.Application.message.startOCR">OCR Started, please wait...</key>
-		<key name="chav1961.creolenotepad.Application.message.endOCR">OCR completed</key>
-		<key name="chav1961.creolenotepad.Application.message.OCRfailed">OCR failed (%1$s)</key>
 
 <!-- Main menu -->
 		<key name="menu.main.file">File</key>
@@ -94,6 +91,10 @@
 <!-- CreoleTab class localization-->
 		<key name="chav1961.creolenotepad.CreoleTab.save.title">Save file</key>
 		<key name="chav1961.creolenotepad.CreoleTab.save.message">Current file modifications are not saved. Save it</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.startOCR">Starting ORC, please wait...</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.endOCR">OCR completed</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.OCRfailed">OCR failed for [%1$s]: %2$s</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.loadFailed">Load failed for [%1$s]: %2$s</key>
 
 <!-- Settings class localization -->
 		<key name="settings.title">Settings</key>
@@ -192,9 +193,6 @@
 		<key name="chav1961.creolenotepad.Application.message.cssnotexists">Пользовательская CSS (%1$s) не найдена или недсоутпна для вас. Будет использована CSS по умолчанию.</key>
 		<key name="chav1961.creolenotepad.Application.help.title">О программе</key>
 		<key name="chav1961.creolenotepad.Application.help.content">uri(aboutApplication.cre)</key>
-		<key name="chav1961.creolenotepad.Application.message.startOCR">Распознавание запущено, ждите...</key>
-		<key name="chav1961.creolenotepad.Application.message.endOCR">Распознавание выполнено</key>
-		<key name="chav1961.creolenotepad.Application.message.OCRfailed">Ошибка распознавания (%1$s)</key>
 		
 <!-- Main menu -->
 		<key name="menu.main.file">Файл</key>
@@ -271,6 +269,10 @@
 <!-- Локализация класса CreoleTab -->
 		<key name="chav1961.creolenotepad.CreoleTab.save.title">Сохранить файл</key>
 		<key name="chav1961.creolenotepad.CreoleTab.save.message">Изменения в текущем файле не сохранены. Сохранить их?</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.startOCR">Распознавание запущено, ждите</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.endOCR">Распознавание выполнено</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.OCRfailed">Ошибка распознавания для [%1$s]: %2$s</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.loadFailed">Ошибка загрузки для [%1$s]: %2$s</key>
 
 <!-- Локализация класса Settings -->
 		<key name="settings.title">Настройки</key>
