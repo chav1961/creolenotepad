@@ -44,6 +44,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditEvent;
+import javax.swing.text.BadLocationException;
 import javax.swing.undo.UndoManager;
 
 import org.mozilla.universalchardet.UniversalDetector;

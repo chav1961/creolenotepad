@@ -984,7 +984,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 
 	private SupportedLanguages getOCRLang() {
 		if (ocrLang == null) {
-			return SupportedLanguages.of(getCurrentTab().getEditor().getLocale());
+			return SupportedLanguages.of(getCurrentTab().getEditor().getInputContext().getLocale());
 		}
 		else {
 			return ocrLang;

@@ -52,8 +52,7 @@
 		<app:key code="X" ctrl="true" action="cut"/>
 		<app:key code="C" ctrl="true" action="copy"/>
 		<app:key code="V" ctrl="true" action="paste"/>
-		<app:key code="V" ctrl="true" alt="true" action="ocrClipboard"/>
-		<app:key code="I" ctrl="true" shift="true" action="ocrClipboard"/>
+		<app:key code="V" ctrl="true" shift="true" action="ocrClipboard"/>
 		<app:key code="F" ctrl="true" action="find"/>
 		<app:key code="F" ctrl="true" shift="true" action="ocrFile"/>
 		<app:key code="H" ctrl="true" action="findreplace"/>
