@@ -74,6 +74,7 @@ import chav1961.purelib.ui.swing.useful.JCreoleEditor;
 import chav1961.purelib.ui.swing.useful.JEnableMaskManipulator;
 import chav1961.purelib.ui.swing.useful.JLocalizedOptionPane;
 import chav1961.purelib.ui.swing.useful.LocalizedFormatter;
+import net.sourceforge.tess4j.ITessAPI;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 
@@ -391,8 +392,8 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 					throw new UnsupportedOperationException("Language ["+lang+"] is not supported yet");
 			
 			}
-			tesseract.setPageSegMode(1);
-			tesseract.setOcrEngineMode(1);
+			tesseract.setPageSegMode(ITessAPI.TessPageSegMode.PSM_AUTO_OSD);
+			tesseract.setOcrEngineMode(ITessAPI.TessOcrEngineMode.OEM_LSTM_ONLY);
 			
 			getLogger().message(Severity.info, KEY_MESSAGE_START_OCR);
 			editor.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));

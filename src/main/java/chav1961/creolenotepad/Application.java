@@ -85,10 +85,12 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public static final String			ARG_PROPFILE_LOCATION = "prop";
 	public static final String			LRU_PREFIX = "lru";
 	public static final String			PROP_CSS_FILE = "cssFile";
+	public static final String			PROP_USE_VOICE_INPUT = "useVoiceInput";
 	public static final String			PROP_RU_MODEL = "ruModel";
 	public static final String			PROP_EN_MODEL = "enModel";
-	public static final String			PROP_TESSERACT_MODEL = "tesseractModel";
 	public static final String			PROP_TOGGLE_PAUSE = "togglePause";
+	public static final String			PROP_USE_OCR = "useOCR";
+	public static final String			PROP_TESSERACT_MODEL = "tesseractModel";
 	public static final String			PROP_SAMPLE_RATE = "sampleRate";
 	public static final String			PROP_APP_RECTANGLE = "appRectangle";
 
@@ -134,6 +136,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	private static final String			MENU_EDIT_OCR = "menu.main.edit.ocr";
 	private static final String			MENU_EDIT_OCR_CLIP = "menu.main.edit.ocr.clipboard";
 	private static final String			MENU_EDIT_OCR_FILE = "menu.main.edit.ocr.file";
+	private static final String			MENU_EDIT_OCR_LANG_CURRENT = "menu.main.edit.ocr.lang.current";
 
 	static final String[]				MENUS = {
 											MENU_FILE_LRU,
@@ -162,6 +165,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 											MENU_EDIT_OCR,
 											MENU_EDIT_OCR_CLIP,
 											MENU_EDIT_OCR_FILE,
+											MENU_EDIT_OCR_LANG_CURRENT
 										};
 
 	static final long 					FILE_LRU = 1L << 0;
@@ -190,7 +194,8 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	static final long 					EDIT_OCR = 1L << 23;	
 	static final long 					EDIT_OCR_CLIP = 1L << 24;	
 	static final long 					EDIT_OCR_FILE = 1L << 25;	
-	static final long 					TOTAL_EDIT = EDIT | EDIT_CUT | EDIT_COPY| EDIT_PASTE_LINK | EDIT_PASTE_IMAGE | EDIT_OCR | EDIT_FIND | EDIT_FIND_REPLACE;
+	static final long 					EDIT_OCR_LANG_CURRENT = 1L << 26;	
+	static final long 					TOTAL_EDIT = EDIT | EDIT_CUT | EDIT_COPY| EDIT_PASTE_LINK | EDIT_PASTE_IMAGE | EDIT_OCR | EDIT_FIND | EDIT_FIND_REPLACE | EDIT_OCR_LANG_CURRENT;
 	static final long 					TOTAL_EDIT_SELECTION = EDIT_CAPTION_UP | EDIT_CAPTION_DOWN | EDIT_LIST_UP | EDIT_LIST_DOWN | EDIT_ORDERED_LIST_UP | EDIT_ORDERED_LIST_DOWN | EDIT_ORDERED_BOLD | EDIT_ORDERED_ITALIC;	
 	
 	private static enum FileFormat {
@@ -223,6 +228,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	private final JEnableMaskManipulator	emm;
 	private final List<String>				lruFiles = new ArrayList<>();
 	private final VoiceParser				vp;
+	private SupportedLanguages				ocrLang = null;
 	
 	public Application(final ContentMetadataInterface mdi, final CountDownLatch latch, final File props) throws IOException {
 		if (mdi == null) {
@@ -287,7 +293,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	        fillLRU(fcm.getLastUsed());
 	        
 	        Toolkit.getDefaultToolkit().getSystemClipboard().addFlavorListener((e)->flavorChange());
-	        
+
 			fillLocalizedStrings();
 			
 			if (VoiceParser.isMicrophoneExists(properties.getProperty(PROP_SAMPLE_RATE, int.class, PROP_DEFAULT_SAMPLE_RATE))) {
@@ -322,15 +328,6 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 			else {
 				this.vp = null;
 			}			
-		}
-	}
-
-	private void flavorChange() {
-		if (Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.imageFlavor)) {
-			
-		}
-		else if (Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(DataFlavor.stringFlavor)) {
-			
 		}
 	}
 
@@ -451,7 +448,6 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		}
 	}
 
-	
 	@OnAction("action:/cut")
 	public void cut() {
 		getCurrentTab().getEditor().cut();
@@ -495,7 +491,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public void ocrClipboard() {
 		try{
 			if (OCRSelect.isImageInClipboard()) {
-				getCurrentTab().insertOCR((BufferedImage)Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.imageFlavor), SupportedLanguages.of(getCurrentTab().getEditor().getLocale()));
+				getCurrentTab().insertOCR((BufferedImage)Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.imageFlavor), getOCRLang());
 			}
 		} catch (IOException | UnsupportedFlavorException e) {
 			getLogger().message(Severity.warning, e, e.getLocalizedMessage());
@@ -514,6 +510,18 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		} catch (ContentException | IOException e) {
 			getLogger().message(Severity.warning, e, e.getLocalizedMessage());
 		}
+	}
+
+	@OnAction("action:/ocrDefaultLang")
+	public void selectDefaultOCRLanguage(final Hashtable<String,String[]> langs) {
+		ocrLang = null;
+		emm.setCheckMaskOn(EDIT_OCR_LANG_CURRENT);
+	}
+	
+	@OnAction("action:builtin:/builtin.languages.ocr")
+	public void selectPredefinedOCRLanguage(final Hashtable<String,String[]> langs) {
+		ocrLang = SupportedLanguages.valueOf(langs.get("lang")[0]);
+		emm.setCheckMaskOff(EDIT_OCR_LANG_CURRENT);
 	}
 	
 	@OnAction("action:/find")
@@ -733,7 +741,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public void settings() {
 		final Settings	settings = new Settings(state, properties);
 		
-		try{if (ask(settings, localizer, 500, 150)) {
+		try{if (ask(settings, localizer, 500, 180)) {
 				settings.storeProperties(properties);
 				properties.store(props);
 			}
@@ -972,6 +980,21 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		final Image newImg = image.getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);  
 		
 		return new ImageIcon(newImg); 		
+	}
+
+	private SupportedLanguages getOCRLang() {
+		if (ocrLang == null) {
+			return SupportedLanguages.of(getCurrentTab().getEditor().getLocale());
+		}
+		else {
+			return ocrLang;
+		}
+	}
+
+	private void flavorChange() {
+		if (tabs.getComponentCount() > 0) {
+			getCurrentTab().clipboardChanged();
+		}
 	}
 	
 	private static class ApplicationArgParser extends ArgParser {

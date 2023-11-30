@@ -24,6 +24,11 @@
 			<app:submenu name="menu.main.edit.ocr" caption="menu.main.edit.ocr" tooltip="menu.main.edit.ocr.tt">
 				<app:item name="menu.main.edit.ocr.clipboard" caption="menu.main.edit.ocr.clipboard" tooltip="menu.main.edit.ocr.clipboard.tt" action="ocrClipboard"/>
 				<app:item name="menu.main.edit.ocr.file" caption="menu.main.edit.ocr.file" tooltip="menu.main.edit.ocr.file.tt" action="ocrFile"/>
+				<app:separator/>
+				<app:submenu name="menu.main.edit.lang" caption="menu.main.edit.lang" tooltip="menu.main.edit.lang.tt">
+					<app:item name="menu.main.edit.ocr.lang.current" caption="menu.main.edit.ocr.lang.current" tooltip="menu.main.edit.ocr.lang.current.tt" checkable="true" checked="true" action="ocrDefaultLang"/>
+					<app:builtinSubmenu name="builtin.languages.ocr" caption="menu.main.edit.ocr.lang.predefined" tooltip="menu.main.edit.ocr.lang.predefined.tt"/>
+				</app:submenu>
 			</app:submenu>
 			<app:separator/>
 			<app:item name="menu.main.edit.find" caption="menu.main.edit.find" tooltip="menu.main.edit.find.tt" action="find"/>
@@ -47,6 +52,7 @@
 		<app:key code="X" ctrl="true" action="cut"/>
 		<app:key code="C" ctrl="true" action="copy"/>
 		<app:key code="V" ctrl="true" action="paste"/>
+		<app:key code="V" ctrl="true" alt="true" action="ocrClipboard"/>
 		<app:key code="I" ctrl="true" shift="true" action="ocrClipboard"/>
 		<app:key code="F" ctrl="true" action="find"/>
 		<app:key code="F" ctrl="true" shift="true" action="ocrFile"/>

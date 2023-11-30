@@ -37,6 +37,12 @@
 		<key name="menu.main.edit.ocr.clipboard.tt">From clipboard</key>
 		<key name="menu.main.edit.ocr.file">From file</key>
 		<key name="menu.main.edit.ocr.file.tt">From file</key>
+		<key name="menu.main.edit.lang">Language to OCR</key>
+		<key name="menu.main.edit.lang.tt">Language to OCR</key>		
+		<key name="menu.main.edit.ocr.lang.current">Use current keyboard selection</key>
+		<key name="menu.main.edit.ocr.lang.current.tt">Use current keyboard selection</key>
+		<key name="menu.main.edit.ocr.lang.predefined">Use predefined language</key>
+		<key name="menu.main.edit.ocr.lang.predefined.tt">Use predefined language</key>
 		<key name="menu.main.edit.undo">Undo</key>
 		<key name="menu.main.edit.undo.tt">Undo last operations</key>
 		<key name="menu.main.edit.redo">Redo</key>
@@ -102,12 +108,18 @@
 		<key name="settings.title.help">Settings</key>
 		<key name="settings.cssFile">CSS file</key>
 		<key name="settings.cssFile.tt">CSS file</key>
+		<key name="settings.useVoiceInput">Use voice input</key>
+		<key name="settings.useVoiceInput.tt">Use voice input</key>		
 		<key name="settings.ruModelDir">Russian VOSK model directory</key>
 		<key name="settings.ruModelDir.tt">Russian VOSK model directory</key>
 		<key name="settings.enModelDir">English VOSK model directory</key>
 		<key name="settings.enModelDir.tt">English VOSK model directory</key>
 		<key name="settings.togglePause">Toggle 'Pause' button</key>
 		<key name="settings.togglePause.tt">'Pause' button will be toggled when using voice input from microphone</key>
+		<key name="settings.useOCR">Use OCR</key>
+		<key name="settings.useOCR.tt">Use OCR</key>
+		<key name="settings.tesseractModelDir">Tesseract model directory</key>
+		<key name="settings.tesseractModelDir.tt">Tesseract model directory</key>
 		<key name="settings.sampleRate">Microphone sample rate</key>
 		<key name="settings.sampleRate.tt">Microphone sample rate</key>
 
@@ -219,6 +231,12 @@
 		<key name="menu.main.edit.ocr.clipboard.tt">Из буфера обмена</key>
 		<key name="menu.main.edit.ocr.file">Из файла</key>
 		<key name="menu.main.edit.ocr.file.tt">Из файла</key>
+		<key name="menu.main.edit.lang">Язык распознавания</key>
+		<key name="menu.main.edit.lang.tt">Язык распознавания</key>		
+		<key name="menu.main.edit.ocr.lang.current">По текущей раскладке клаватуры</key>
+		<key name="menu.main.edit.ocr.lang.current.tt">По текущей раскладке клаватуры</key>
+		<key name="menu.main.edit.ocr.lang.predefined">Использовать предопределенный язык</key>
+		<key name="menu.main.edit.ocr.lang.predefined.tt">Использовать предопределенный язык</key>		
 		<key name="menu.main.edit.undo">Отмена</key>
 		<key name="menu.main.edit.undo.tt">Отмена последних операций</key>
 		<key name="menu.main.edit.redo">Восстановить</key>
@@ -280,12 +298,18 @@
 		<key name="settings.title.help">Настройки</key>
 		<key name="settings.cssFile">CSS файл</key>
 		<key name="settings.cssFile.tt">CSS файл</key>
+		<key name="settings.useVoiceInput">Использовать голосовой ввод</key>
+		<key name="settings.useVoiceInput.tt">Использовать голосовой ввод</key>		
 		<key name="settings.ruModelDir">Директория русской модели VOSK</key>
 		<key name="settings.ruModelDir.tt">Директория русской модели VOSK</key>
 		<key name="settings.enModelDir">Директория английской модели VOSK</key>
 		<key name="settings.enModelDir.tt">Директория английской модели VOSK</key>
 		<key name="settings.togglePause">Кнопка 'Pause' вкл/выкл</key>
 		<key name="settings.togglePause.tt">Кнопка 'Pause' включает/выключает режим голосового ввода. Если нет - голосовой ввод работает только при нажатии и удержании кнопки</key>
+		<key name="settings.useOCR">Использовать распознавание текста</key>
+		<key name="settings.useOCR.tt">Использовать распознавание текста</key>
+		<key name="settings.tesseractModelDir">Директория модели Tesseract</key>
+		<key name="settings.tesseractModelDir.tt">Директория модели Tesseract</key>
 		<key name="settings.sampleRate">Скорость оцифровки</key>
 		<key name="settings.sampleRate.tt">Скорость оцифровки микрофона</key>
 
