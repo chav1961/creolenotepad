@@ -64,7 +64,6 @@ import chav1961.purelib.enumerations.MarkupOutputFormat;
 import chav1961.purelib.i18n.interfaces.Localizer;
 import chav1961.purelib.i18n.interfaces.SupportedLanguages;
 import chav1961.purelib.model.interfaces.ContentMetadataInterface;
-import chav1961.purelib.streams.char2char.CreoleOutputWriter;
 import chav1961.purelib.streams.char2char.CreoleWriter;
 import chav1961.purelib.streams.interfaces.PrologueEpilogueMaster;
 import chav1961.purelib.ui.swing.JToolBarWithMeta;
@@ -260,8 +259,8 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 				try{final boolean	cssFound = app.getProperties().containsKey(Application.PROP_CSS_FILE); 
 				
 					if (cssFound && app.getProperties().getProperty(Application.PROP_CSS_FILE,File.class,"").isFile() && app.getProperties().getProperty(Application.PROP_CSS_FILE,File.class,"").canRead()) {
-						final PrologueEpilogueMaster<Writer,CreoleOutputWriter> pm = (wr,inst)->{wr.write(String.format(PROLOGUE_TEMPLATE, app.getProperties().getProperty(Application.PROP_CSS_FILE, URI.class))); return false;}; 
-						final PrologueEpilogueMaster<Writer,CreoleOutputWriter> em = (wr,inst)->{wr.write("</body>\n</html>\n"); return false;};
+						final PrologueEpilogueMaster pm = (wr,inst)->{((Writer)wr).write(String.format(PROLOGUE_TEMPLATE, app.getProperties().getProperty(Application.PROP_CSS_FILE, URI.class))); return false;}; 
+						final PrologueEpilogueMaster em = (wr,inst)->{((Writer)wr).write("</body>\n</html>\n"); return false;};
 						
 						try(final StringWriter	wr = new StringWriter();
 							final CreoleWriter	cw = new CreoleWriter(wr, MarkupOutputFormat.XML2HTML, pm, em)) {
@@ -279,8 +278,8 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 						else {
 							getLogger().message(Severity.warning, Application.KEY_APPLICATION_MESSAGE_NO_CSS_FOUND);
 						}
-						final PrologueEpilogueMaster<Writer,CreoleOutputWriter> pm = (wr,inst)->{wr.write(String.format(PROLOGUE_TEMPLATE, getClass().getResource("cre.css"))); return false;}; 
-						final PrologueEpilogueMaster<Writer,CreoleOutputWriter> em = (wr,inst)->{wr.write("</body>\n</html>\n"); return false;};
+						final PrologueEpilogueMaster pm = (wr,inst)->{((Writer)wr).write(String.format(PROLOGUE_TEMPLATE, getClass().getResource("cre.css"))); return false;}; 
+						final PrologueEpilogueMaster em = (wr,inst)->{((Writer)wr).write("</body>\n</html>\n"); return false;};
 						
 						try(final StringWriter	wr = new StringWriter();
 							final CreoleWriter	cw = new CreoleWriter(wr, MarkupOutputFormat.XML2HTML, pm, em)) {
