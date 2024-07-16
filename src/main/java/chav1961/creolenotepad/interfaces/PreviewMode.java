@@ -1,4 +1,4 @@
-package chav1961.creolenotepad;
+package chav1961.creolenotepad.interfaces;
 
 public enum PreviewMode {
 	EDIT("editor"),

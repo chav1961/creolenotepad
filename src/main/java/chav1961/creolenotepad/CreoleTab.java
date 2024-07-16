@@ -53,6 +53,7 @@ import com.j256.simplemagic.ContentType;
 
 import chav1961.creolenotepad.dialogs.Find;
 import chav1961.creolenotepad.dialogs.FindReplace;
+import chav1961.creolenotepad.interfaces.PreviewMode;
 import chav1961.purelib.basic.PureLibSettings;
 import chav1961.purelib.basic.Utils;
 import chav1961.purelib.basic.interfaces.InputStreamGetter;

@@ -41,6 +41,7 @@ import javax.swing.text.DefaultCaret;
 import chav1961.creolenotepad.dialogs.InsertLink;
 import chav1961.creolenotepad.dialogs.OCRSelect;
 import chav1961.creolenotepad.dialogs.Settings;
+import chav1961.creolenotepad.interfaces.PreviewMode;
 import chav1961.purelib.basic.ArgParser;
 import chav1961.purelib.basic.PureLibSettings;
 import chav1961.purelib.basic.SubstitutableProperties;
