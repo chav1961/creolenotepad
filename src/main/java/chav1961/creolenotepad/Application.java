@@ -20,6 +20,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -110,6 +112,8 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	private static final FilterCallback	CREOLE_FILTER = FilterCallback.ofWithExtension("Creole files", "cre", "*.cre");
 	private static final FilterCallback	IMAGE_FILTER = FilterCallback.of("Image files", "*.png", "*.jpg");
 
+	private static final Pattern		RECT_PATTERN = Pattern.compile("\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)\\s*");
+	
 	private static final String			MENU_FILE_LRU = "menu.main.file.lru";
 	private static final String			MENU_FILE_SAVE = "menu.main.file.save";
 	private static final String			MENU_FILE_SAVE_AS = "menu.main.file.saveAs";
@@ -137,7 +141,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	private static final String			MENU_EDIT_OCR_CLIP = "menu.main.edit.ocr.clipboard";
 	private static final String			MENU_EDIT_OCR_FILE = "menu.main.edit.ocr.file";
 	private static final String			MENU_EDIT_OCR_LANG_CURRENT = "menu.main.edit.ocr.lang.current";
-
+	
 	static final String[]				MENUS = {
 											MENU_FILE_LRU,
 											MENU_FILE_SAVE,
@@ -282,10 +286,20 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 			tabs.addChangeListener((e)->changeTab());
 			
 			if (properties.containsKey(PROP_APP_RECTANGLE)) {
-				final String[]	content = properties.getProperty(PROP_APP_RECTANGLE).split("\\s*,\\s*");
+				final Matcher	m = RECT_PATTERN.matcher(properties.getProperty(PROP_APP_RECTANGLE));
 				
-				setBounds(Integer.valueOf(content[0]), Integer.valueOf(content[1]), Integer.valueOf(content[2]), Integer.valueOf(content[3]));
-				setPreferredSize(new Dimension(Integer.valueOf(content[2]), Integer.valueOf(content[3])));
+				if (m.find()) {
+					final int	x = Integer.valueOf(m.group(1));
+					final int	y = Integer.valueOf(m.group(2));
+					final int	width = Integer.valueOf(m.group(3));
+					final int	height = Integer.valueOf(m.group(4));
+					
+					setBounds(x, y, width, height);
+					setPreferredSize(new Dimension(width, height));
+				}
+				else {
+					SwingUtils.centerMainWindow(this, 0.85f);
+				}
 			}
 			else {
 				SwingUtils.centerMainWindow(this, 0.85f);
@@ -296,7 +310,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 
 			fillLocalizedStrings();
 			
-			if (VoiceParser.isMicrophoneExists(properties.getProperty(PROP_SAMPLE_RATE, int.class, PROP_DEFAULT_SAMPLE_RATE))) {
+			if (VoiceParser.isMicrophoneExists(properties.getProperty(PROP_SAMPLE_RATE, int.class, PROP_DEFAULT_SAMPLE_RATE)) && hasMicrophone()) {
 				this.vp = new VoiceParser((s)->SwingUtilities.invokeLater(()->getCurrentTab().insertVoice(s)), properties.getProperty(PROP_SAMPLE_RATE, int.class, PROP_DEFAULT_SAMPLE_RATE));
 				
 				vp.start();
@@ -318,12 +332,12 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 								microphone.setEnabled(false);
 							});
 							break;
-						default:
+						default :
 							throw new UnsupportedOperationException("Execution control type ["+e.getExecutionControlEventType()+"] i not supported yet");
 					}
 				});
-				vp.setModel(SupportedLanguages.ru, new File("c:/vosk-model-small-ru-0.22"));
-				vp.setModel(SupportedLanguages.en, new File("c:/vosk-model-small-en-us-0.15"));
+				vp.setModel(SupportedLanguages.ru, properties.getProperty(PROP_RU_MODEL, File.class, "c:/vosk-model-small-ru-0.22"));
+				vp.setModel(SupportedLanguages.en, properties.getProperty(PROP_EN_MODEL, File.class, "c:/vosk-model-small-en-us-0.15"));
 			}
 			else {
 				this.vp = null;
@@ -741,7 +755,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public void settings() {
 		final Settings	settings = new Settings(state, properties);
 		
-		try{if (ask(settings, localizer, 500, 180)) {
+		try{if (ask(settings, localizer, 500, 200)) {
 				settings.storeProperties(properties);
 				properties.store(props);
 			}
@@ -761,7 +775,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	}
 
 	boolean hasMicrophone() {
-		return vp != null;
+		return vp != null && properties.getProperty(PROP_USE_VOICE_INPUT, boolean.class, "false");
 	}
 	
 	VoiceParser getVoiceParser() {
