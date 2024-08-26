@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.Thread.State;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.EnumMap;
@@ -294,7 +295,7 @@ loop:		for (;;) {
 	}
 	
 	static boolean isMicrophoneExists(final int sampleRate) {
-		try(final Closeable close = (Closeable) new URL(getMicrophoneUrl(sampleRate)).openConnection()) {
+		try(final Closeable close = (Closeable) URI.create(getMicrophoneUrl(sampleRate)).toURL().openConnection()) {
 			final URLConnection conn = (URLConnection)close; 
 			
 			conn.connect();

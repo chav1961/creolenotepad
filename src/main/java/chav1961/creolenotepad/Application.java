@@ -200,7 +200,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	static final long 					EDIT_OCR_CLIP = 1L << 24;	
 	static final long 					EDIT_OCR_FILE = 1L << 25;	
 	static final long 					EDIT_OCR_LANG_CURRENT = 1L << 26;	
-	static final long 					TOTAL_EDIT = EDIT | EDIT_CUT | EDIT_COPY| EDIT_PASTE_LINK | EDIT_PASTE_IMAGE | EDIT_OCR | EDIT_FIND | EDIT_FIND_REPLACE | EDIT_OCR_LANG_CURRENT;
+	static final long 					TOTAL_EDIT = EDIT | EDIT_CUT | EDIT_COPY| EDIT_PASTE_LINK | EDIT_PASTE_IMAGE | EDIT_OCR | EDIT_FIND | EDIT_FIND_REPLACE | EDIT_OCR_FILE | EDIT_OCR_LANG_CURRENT;
 	static final long 					TOTAL_EDIT_SELECTION = EDIT_CAPTION_UP | EDIT_CAPTION_DOWN | EDIT_LIST_UP | EDIT_LIST_DOWN | EDIT_ORDERED_LIST_UP | EDIT_ORDERED_LIST_DOWN | EDIT_ORDERED_BOLD | EDIT_ORDERED_ITALIC;	
 	
 	private static enum FileFormat {
@@ -776,7 +776,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	}
 
 	boolean hasMicrophone() {
-		return vp != null && properties.getProperty(PROP_USE_VOICE_INPUT, boolean.class, "false");
+		return properties.getProperty(PROP_USE_VOICE_INPUT, boolean.class, "false");
 	}
 	
 	VoiceParser getVoiceParser() {
