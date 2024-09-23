@@ -480,9 +480,10 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 
 	@OnAction("action:/pasteLink")
 	public void pasteLink() {
-		final InsertLink	il = new InsertLink(getLogger(), getCurrentTab().getEditor());
+		final InsertLink	il = new InsertLink(getLogger());
 		
-		try{if (ask(il, localizer, 300, 100)) {
+		try{
+			if (ask(il, localizer, 300, 100)) {
 				getCurrentTab().getEditor().replaceSelection(" [["+il.link+"|"+il.title+"]] ");
 			}
 		} catch (ContentException e) {
