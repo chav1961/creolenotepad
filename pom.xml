@@ -32,11 +32,17 @@
 	</licenses>
 
     <repositories>
-        <repository>
+    <repository>
+        <id>com.teamdev</id>
+        <url>https://europe-maven.pkg.dev/jxbrowser/releases</url>
+    </repository>
+<!--    <repository>
             <id>Any</id>
             <url>http://maven.nuiton.org/nexus/content/groups/releases</url>
         </repository>
+-->        
     </repositories>
+    
     
  	<properties>
 		<github.global.server>github</github.global.server>
@@ -88,7 +94,7 @@
 			<version>2.4.0</version>
 		</dependency>
 	</dependencies>
-
+	
  	<distributionManagement>
  		<repository>
 			<id>internal.repo</id>
@@ -106,8 +112,8 @@
                	<version>3.8.1</version>
 				<inherited>true</inherited>
 				<configuration>
-  					<source>9</source>
-					<target>9</target>
+  					<source>21</source>
+					<target>21</target>
 				</configuration>
 			</plugin>
 			<plugin>
