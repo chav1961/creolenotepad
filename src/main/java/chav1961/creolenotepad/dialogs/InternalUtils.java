@@ -8,7 +8,7 @@ import javax.swing.text.JTextComponent;
 class InternalUtils {
 	public static boolean find(final JTextComponent editor, final String toFind, final boolean backward, final boolean wholeWord, final boolean useRegex) {
 		final int		pos = editor.getCaretPosition();
-		final String 	content = backward ? editor.getText().substring(0, pos) : editor.getText().substring(pos);
+		final String 	content = (backward ? editor.getText().substring(0, pos) : editor.getText().substring(pos)).replace("\r", "");
 		final String	expr = useRegex ? toFind : "\\Q"+toFind+"\\E";
 		final String	wordExpr = wholeWord ? "(\\s+|^)" + expr +"(\\s+|$)" : expr;
 		final Pattern	p = Pattern.compile(wordExpr, Pattern.DOTALL);

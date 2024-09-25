@@ -1,7 +1,6 @@
 package chav1961.creolenotepad;
 
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -45,6 +44,7 @@ import chav1961.creolenotepad.interfaces.PreviewMode;
 import chav1961.purelib.basic.ArgParser;
 import chav1961.purelib.basic.PureLibSettings;
 import chav1961.purelib.basic.SubstitutableProperties;
+import chav1961.purelib.basic.Utils;
 import chav1961.purelib.basic.exceptions.CommandLineParametersException;
 import chav1961.purelib.basic.exceptions.ContentException;
 import chav1961.purelib.basic.exceptions.LocalizationException;
@@ -79,8 +79,6 @@ import chav1961.purelib.ui.swing.useful.JFileSelectionDialog.FilterCallback;
 import chav1961.purelib.ui.swing.useful.JSimpleSplash;
 import chav1961.purelib.ui.swing.useful.JStateString;
 import chav1961.purelib.ui.swing.useful.interfaces.FileContentChangedEvent;
-import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.TesseractException;
 
 public class Application extends JFrame implements AutoCloseable, NodeMetadataOwner, LocaleChangeListener, LocalizerOwner, LoggerFacadeOwner, InputStreamGetter, OutputStreamGetter {
 	private static final long 	serialVersionUID = 1L;
@@ -480,9 +478,14 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 
 	@OnAction("action:/pasteLink")
 	public void pasteLink() {
-		final InsertLink	il = new InsertLink(getLogger(), getCurrentTab().getEditor());
+		final InsertLink	il = new InsertLink(getLogger());
 		
-		try{if (ask(il, localizer, 300, 100)) {
+		try{final String	selection = ((CreoleTab)tabs.getSelectedComponent()).getEditor().getSelectedText();
+				
+			if (!Utils.checkEmptyOrNullString(selection)) {
+				il.title = selection;
+			}
+			if (ask(il, localizer, 300, 100)) {
 				getCurrentTab().getEditor().replaceSelection(" [["+il.link+"|"+il.title+"]] ");
 			}
 		} catch (ContentException e) {
