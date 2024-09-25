@@ -21,6 +21,15 @@
 			<app:item name="menu.main.edit.cut" caption="menu.main.edit.cut" tooltip="menu.main.edit.cut.tt" action="cut"/>
 			<app:item name="menu.main.edit.copy" caption="menu.main.edit.copy" tooltip="menu.main.edit.copy.tt" action="copy"/>
 			<app:item name="menu.main.edit.paste" caption="menu.main.edit.paste" tooltip="menu.main.edit.paste.tt" action="paste"/>
+			<app:submenu name="menu.main.edit.ocr" caption="menu.main.edit.ocr" tooltip="menu.main.edit.ocr.tt">
+				<app:item name="menu.main.edit.ocr.clipboard" caption="menu.main.edit.ocr.clipboard" tooltip="menu.main.edit.ocr.clipboard.tt" action="ocrClipboard"/>
+				<app:item name="menu.main.edit.ocr.file" caption="menu.main.edit.ocr.file" tooltip="menu.main.edit.ocr.file.tt" action="ocrFile"/>
+				<app:separator/>
+				<app:submenu name="menu.main.edit.lang" caption="menu.main.edit.lang" tooltip="menu.main.edit.lang.tt">
+					<app:item name="menu.main.edit.ocr.lang.current" caption="menu.main.edit.ocr.lang.current" tooltip="menu.main.edit.ocr.lang.current.tt" checkable="true" checked="true" action="ocrDefaultLang"/>
+					<app:builtinSubmenu name="builtin.languages.ocr" caption="menu.main.edit.ocr.lang.predefined" tooltip="menu.main.edit.ocr.lang.predefined.tt"/>
+				</app:submenu>
+			</app:submenu>
 			<app:separator/>
 			<app:item name="menu.main.edit.find" caption="menu.main.edit.find" tooltip="menu.main.edit.find.tt" action="find"/>
 			<app:item name="menu.main.edit.findreplace" caption="menu.main.edit.findreplace" tooltip="menu.main.edit.findreplace.tt" action="findreplace"/>
@@ -43,13 +52,17 @@
 		<app:key code="X" ctrl="true" action="cut"/>
 		<app:key code="C" ctrl="true" action="copy"/>
 		<app:key code="V" ctrl="true" action="paste"/>
+		<app:key code="V" ctrl="true" shift="true" action="ocrClipboard"/>
 		<app:key code="F" ctrl="true" action="find"/>
+		<app:key code="F" ctrl="true" shift="true" action="ocrFile"/>
 		<app:key code="H" ctrl="true" action="findreplace"/>
 		<app:key code="P" ctrl="true" action="previewProject"/>
 		<app:key code="Z" ctrl="true" action="undo"/>
 		<app:key code="Y" ctrl="true" action="redo"/>
 	</app:keyset>
  	<app:menu id="toolbarmenu">
+		<app:item name="menu.main.edit.microphone" caption="menu.main.edit.microphone" tooltip="menu.main.edit.microphone.tt" checkable="true" icon="root://chav1961.creolenotepad.Application/chav1961/creolenotepad/microphone.png" action="microphone"/>
+		<app:separator/>
 		<app:item name="menu.main.edit.cut" caption="menu.main.edit.cut" tooltip="menu.main.edit.cut.tt" icon="root://chav1961.creolenotepad.Application/chav1961/creolenotepad/cut.png" action="cut"/>
 		<app:item name="menu.main.edit.copy" caption="menu.main.edit.copy" tooltip="menu.main.edit.copy.tt" icon="root://chav1961.creolenotepad.Application/chav1961/creolenotepad/copy.png" action="copy"/>
 		<app:item name="menu.main.edit.paste" caption="menu.main.edit.paste" tooltip="menu.main.edit.paste.tt" icon="root://chav1961.creolenotepad.Application/chav1961/creolenotepad/paste.png" action="paste"/>

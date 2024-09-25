@@ -2,15 +2,15 @@
 <localization xmlns="http://www.i18n.purelib.chav1961.ru/">
 	<lang name="en">
 <!-- Application -->
-		<key name="chav1961.bt.creolenotepad.Application.title">(c) 2023, A.V.Chernomyrdin. Simple CREOLE editor V.R.=0.0 %1$s</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.ready">Ready</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.notfound">Not found</key>		
-		<key name="chav1961.bt.creolenotepad.Application.message.replaced">%1$s items replaced</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.file.not.exists">File (%1$s) is not exists and will be removed from LRU list</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.nocssfound">Custom CSS not defined. Default will be used. Use Tools-&gt;Settings menu to define custom CSS</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.cssnotexists">Custom CSS file(%1$s) is not exists or is not accessible for you. Default will be used.</key>
-		<key name="chav1961.bt.creolenotepad.Application.help.title">About...</key>
-		<key name="chav1961.bt.creolenotepad.Application.help.content">uri(aboutApplication.cre)</key>
+		<key name="chav1961.creolenotepad.Application.title">(c) 2023, A.V.Chernomyrdin. Simple CREOLE editor V.R.=0.0 %1$s</key>
+		<key name="chav1961.creolenotepad.Application.message.ready">Ready</key>
+		<key name="chav1961.creolenotepad.Application.message.notfound">Not found</key>		
+		<key name="chav1961.creolenotepad.Application.message.replaced">%1$s items replaced</key>
+		<key name="chav1961.creolenotepad.Application.message.file.not.exists">File (%1$s) is not exists and will be removed from LRU list</key>
+		<key name="chav1961.creolenotepad.Application.message.nocssfound">Custom CSS not defined. Default will be used. Use Tools-&gt;Settings menu to define custom CSS</key>
+		<key name="chav1961.creolenotepad.Application.message.cssnotexists">Custom CSS file(%1$s) is not exists or is not accessible for you. Default will be used.</key>
+		<key name="chav1961.creolenotepad.Application.help.title">About...</key>
+		<key name="chav1961.creolenotepad.Application.help.content">uri(aboutApplication.cre)</key>
 
 <!-- Main menu -->
 		<key name="menu.main.file">File</key>
@@ -29,6 +29,20 @@
 		<key name="menu.main.file.exit.tt">Exit application</key>
 		<key name="menu.main.edit">Edit</key>
 		<key name="menu.main.edit.tt">Edit image</key>
+		<key name="menu.main.edit.microphone">Enable/disable microphone</key>
+		<key name="menu.main.edit.microphone.tt">Enable/disable microphone</key>
+		<key name="menu.main.edit.ocr">Image recognition</key>
+		<key name="menu.main.edit.ocr.tt">Image recognition</key>
+		<key name="menu.main.edit.ocr.clipboard">From clipboard</key>
+		<key name="menu.main.edit.ocr.clipboard.tt">From clipboard</key>
+		<key name="menu.main.edit.ocr.file">From file</key>
+		<key name="menu.main.edit.ocr.file.tt">From file</key>
+		<key name="menu.main.edit.lang">Language to OCR</key>
+		<key name="menu.main.edit.lang.tt">Language to OCR</key>		
+		<key name="menu.main.edit.ocr.lang.current">Use current keyboard selection</key>
+		<key name="menu.main.edit.ocr.lang.current.tt">Use current keyboard selection</key>
+		<key name="menu.main.edit.ocr.lang.predefined">Use predefined language</key>
+		<key name="menu.main.edit.ocr.lang.predefined.tt">Use predefined language</key>
 		<key name="menu.main.edit.undo">Undo</key>
 		<key name="menu.main.edit.undo.tt">Undo last operations</key>
 		<key name="menu.main.edit.redo">Redo</key>
@@ -39,6 +53,10 @@
 		<key name="menu.main.edit.copy.tt">Copy selected area into clipboard</key>
 		<key name="menu.main.edit.paste">Paste</key>
 		<key name="menu.main.edit.paste.tt">Paste selected area from clipboard</key>
+		<key name="menu.main.edit.pasteLink">Paste link</key>
+		<key name="menu.main.edit.pasteLink.tt">Paste link</key>
+		<key name="menu.main.edit.pasteImage">Paste image</key>
+		<key name="menu.main.edit.pasteImage.tt">Paste link</key>
 		<key name="menu.main.edit.find">Find</key>
 		<key name="menu.main.edit.find.tt">Find string</key>
 		<key name="menu.main.edit.findreplace">Find &amp; Replace</key>
@@ -76,12 +94,34 @@
 		<key name="menu.main.help.about">About...</key>
 		<key name="menu.main.help.about.tt">Info about the application</key>
 
+<!-- CreoleTab class localization-->
+		<key name="chav1961.creolenotepad.CreoleTab.save.title">Save file</key>
+		<key name="chav1961.creolenotepad.CreoleTab.save.message">Current file modifications are not saved. Save it</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.startOCR">Starting ORC, please wait...</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.endOCR">OCR completed</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.OCRfailed">OCR failed for [%1$s]: %2$s</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.loadFailed">Load failed for [%1$s]: %2$s</key>
+
 <!-- Settings class localization -->
 		<key name="settings.title">Settings</key>
 		<key name="settings.title.tt">Settings</key>
 		<key name="settings.title.help">Settings</key>
 		<key name="settings.cssFile">CSS file</key>
 		<key name="settings.cssFile.tt">CSS file</key>
+		<key name="settings.useVoiceInput">Use voice input</key>
+		<key name="settings.useVoiceInput.tt">Use voice input</key>		
+		<key name="settings.ruModelDir">Russian VOSK model directory</key>
+		<key name="settings.ruModelDir.tt">Russian VOSK model directory</key>
+		<key name="settings.enModelDir">English VOSK model directory</key>
+		<key name="settings.enModelDir.tt">English VOSK model directory</key>
+		<key name="settings.togglePause">Toggle 'Pause' button</key>
+		<key name="settings.togglePause.tt">'Pause' button will be toggled when using voice input from microphone</key>
+		<key name="settings.useOCR">Use OCR</key>
+		<key name="settings.useOCR.tt">Use OCR</key>
+		<key name="settings.tesseractModelDir">Tesseract model directory</key>
+		<key name="settings.tesseractModelDir.tt">Tesseract model directory</key>
+		<key name="settings.sampleRate">Microphone sample rate</key>
+		<key name="settings.sampleRate.tt">Microphone sample rate</key>
 
 <!-- Find class localization -->
 		<key name="find.title">Find</key>
@@ -127,19 +167,44 @@
 		<key name="insertlink.link.tt">Link</key>
 		<key name="insertlink.title">Title</key>
 		<key name="insertlink.title.tt">Title</key>
+
+<!-- SupportedSamples class localization -->
+		<key name="SupportedSamples.96000">96000 sps</key>
+		<key name="SupportedSamples.96000.tt">96000 samples per second</key>
+		<key name="SupportedSamples.48000">48000 sps</key>
+		<key name="SupportedSamples.48000.tt">48000 samples per second</key>
+		<key name="SupportedSamples.44100">44100 sps</key>
+		<key name="SupportedSamples.44100.tt">44100 samples per second</key>
+		<key name="SupportedSamples.22050">22050 sps</key>
+		<key name="SupportedSamples.22050.tt">22050 samples per second</key>
+		<key name="SupportedSamples.16000">16000 sps</key>
+		<key name="SupportedSamples.16000.tt">16000 samples per second</key>
+		<key name="SupportedSamples.11025">11025 sps</key>
+		<key name="SupportedSamples.11025.tt">11025 samples per second</key>
+		<key name="SupportedSamples.8000">8000 sps</key>
+		<key name="SupportedSamples.8000.tt">8000 samples per second</key>
+
+<!-- OCRSelect class localization -->
+		<key name="OCRSelect.title">OCR image</key>
+		<key name="OCRSelect.title.tt">OCR scanned image</key>
+		<key name="OCRSelect.title.help">OCR scanned image</key>
+		<key name="OCRSelect.file">Image file to OCR</key>
+		<key name="OCRSelect.file.tt">Image file to OCR</key>
+		<key name="OCRSelect.lang">Document language</key>
+		<key name="OCRSelect.lang.tt">Document language</key>
 		 
 	</lang>
 	<lang name="ru">
 <!-- Приложение -->
-		<key name="chav1961.bt.creolenotepad.Application.title">(c) 2023, А.В.Черномырдин. Простой редактор CREOLE V.R.=0.0 %1$s</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.ready">Готово</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.notfound">Не найдено</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.replaced">%1$s строк заменено</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.file.not.exists">Файл (%1$s) не найден и будет удален из списка последних загруженных</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.nocssfound">Пользовательская CSS не задана. Будет использована CSS по умолчанию. Задайте пользовательскую CSS через меню Инструменты-&gt;Настройки</key>
-		<key name="chav1961.bt.creolenotepad.Application.message.cssnotexists">Пользовательская CSS (%1$s) не найдена или недсоутпна для вас. Будет использована CSS по умолчанию.</key>
-		<key name="chav1961.bt.creolenotepad.Application.help.title">О программе</key>
-		<key name="chav1961.bt.creolenotepad.Application.help.content">uri(aboutApplication.cre)</key>
+		<key name="chav1961.creolenotepad.Application.title">(c) 2023, А.В.Черномырдин. Простой редактор CREOLE V.R.=0.0 %1$s</key>
+		<key name="chav1961.creolenotepad.Application.message.ready">Готово</key>
+		<key name="chav1961.creolenotepad.Application.message.notfound">Не найдено</key>
+		<key name="chav1961.creolenotepad.Application.message.replaced">%1$s строк заменено</key>
+		<key name="chav1961.creolenotepad.Application.message.file.not.exists">Файл (%1$s) не найден и будет удален из списка последних загруженных</key>
+		<key name="chav1961.creolenotepad.Application.message.nocssfound">Пользовательская CSS не задана. Будет использована CSS по умолчанию. Задайте пользовательскую CSS через меню Инструменты-&gt;Настройки</key>
+		<key name="chav1961.creolenotepad.Application.message.cssnotexists">Пользовательская CSS (%1$s) не найдена или недсоутпна для вас. Будет использована CSS по умолчанию.</key>
+		<key name="chav1961.creolenotepad.Application.help.title">О программе</key>
+		<key name="chav1961.creolenotepad.Application.help.content">uri(aboutApplication.cre)</key>
 		
 <!-- Main menu -->
 		<key name="menu.main.file">Файл</key>
@@ -158,6 +223,20 @@
 		<key name="menu.main.file.exit.tt">Выход из редактора</key>
 		<key name="menu.main.edit">Правка</key>
 		<key name="menu.main.edit.tt">Правка изображения</key>
+		<key name="menu.main.edit.microphone">Микрофон вкл/выкл</key>
+		<key name="menu.main.edit.microphone.tt">Микрофон вкл/выкл</key>
+		<key name="menu.main.edit.ocr">Распознать</key>
+		<key name="menu.main.edit.ocr.tt">Распознавание отсканированного текста</key>
+		<key name="menu.main.edit.ocr.clipboard">Из буфера обмена</key>
+		<key name="menu.main.edit.ocr.clipboard.tt">Из буфера обмена</key>
+		<key name="menu.main.edit.ocr.file">Из файла</key>
+		<key name="menu.main.edit.ocr.file.tt">Из файла</key>
+		<key name="menu.main.edit.lang">Язык распознавания</key>
+		<key name="menu.main.edit.lang.tt">Язык распознавания</key>		
+		<key name="menu.main.edit.ocr.lang.current">По текущей раскладке клаватуры</key>
+		<key name="menu.main.edit.ocr.lang.current.tt">По текущей раскладке клаватуры</key>
+		<key name="menu.main.edit.ocr.lang.predefined">Использовать предопределенный язык</key>
+		<key name="menu.main.edit.ocr.lang.predefined.tt">Использовать предопределенный язык</key>		
 		<key name="menu.main.edit.undo">Отмена</key>
 		<key name="menu.main.edit.undo.tt">Отмена последних операций</key>
 		<key name="menu.main.edit.redo">Восстановить</key>
@@ -194,8 +273,8 @@
 		<key name="menu.main.edit.italic.tt">Наклонный шрифт</key>
 		<key name="menu.main.tools">Инструменты</key>
 		<key name="menu.main.tools.tt">Управление приложением</key>
-		<key name="menu.main.tools.preview">Скрипты</key>
-		<key name="menu.main.tools.preview.tt">Записать или выполнить скрипт</key>		
+		<key name="menu.main.tools.preview">Просмотр</key>
+		<key name="menu.main.tools.preview.tt">Просмотреть текущий файл в формате *.htlp</key>		
 		<key name="menu.main.tools.settings">Настройки</key>
 		<key name="menu.main.tools.settings.tt">Настройки приложения</key>
 		<key name="menu.main.tools.languages">Язык</key>
@@ -205,12 +284,34 @@
 		<key name="menu.main.help.about">О программе</key>
 		<key name="menu.main.help.about.tt">Информация о приложении</key>
 
+<!-- Локализация класса CreoleTab -->
+		<key name="chav1961.creolenotepad.CreoleTab.save.title">Сохранить файл</key>
+		<key name="chav1961.creolenotepad.CreoleTab.save.message">Изменения в текущем файле не сохранены. Сохранить их?</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.startOCR">Распознавание запущено, ждите</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.endOCR">Распознавание выполнено</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.OCRfailed">Ошибка распознавания для [%1$s]: %2$s</key>
+		<key name="chav1961.creolenotepad.CreoleTab.message.loadFailed">Ошибка загрузки для [%1$s]: %2$s</key>
+
 <!-- Локализация класса Settings -->
 		<key name="settings.title">Настройки</key>
 		<key name="settings.title.tt">Настройки</key>
 		<key name="settings.title.help">Настройки</key>
 		<key name="settings.cssFile">CSS файл</key>
 		<key name="settings.cssFile.tt">CSS файл</key>
+		<key name="settings.useVoiceInput">Использовать голосовой ввод</key>
+		<key name="settings.useVoiceInput.tt">Использовать голосовой ввод</key>		
+		<key name="settings.ruModelDir">Директория русской модели VOSK</key>
+		<key name="settings.ruModelDir.tt">Директория русской модели VOSK</key>
+		<key name="settings.enModelDir">Директория английской модели VOSK</key>
+		<key name="settings.enModelDir.tt">Директория английской модели VOSK</key>
+		<key name="settings.togglePause">Кнопка 'Pause' вкл/выкл</key>
+		<key name="settings.togglePause.tt">Кнопка 'Pause' включает/выключает режим голосового ввода. Если нет - голосовой ввод работает только при нажатии и удержании кнопки</key>
+		<key name="settings.useOCR">Использовать распознавание текста</key>
+		<key name="settings.useOCR.tt">Использовать распознавание текста</key>
+		<key name="settings.tesseractModelDir">Директория модели Tesseract</key>
+		<key name="settings.tesseractModelDir.tt">Директория модели Tesseract</key>
+		<key name="settings.sampleRate">Скорость оцифровки</key>
+		<key name="settings.sampleRate.tt">Скорость оцифровки микрофона</key>
 
 <!-- Локализация класса Find -->
 		<key name="find.title">Найти</key>
@@ -256,6 +357,31 @@
 		<key name="insertlink.link.tt">Ссылка</key>
 		<key name="insertlink.title">Надпись</key>
 		<key name="insertlink.title.tt">Надпись</key>
+
+<!-- Локализация класса SupportedSamples -->
+		<key name="SupportedSamples.96000">96000 выб/сек</key>
+		<key name="SupportedSamples.96000.tt">96000 выборок в секунду</key>
+		<key name="SupportedSamples.48000">48000 выб/сек</key>
+		<key name="SupportedSamples.48000.tt">48000 выборок в секунду</key>
+		<key name="SupportedSamples.44100">44100 выб/сек</key>
+		<key name="SupportedSamples.44100.tt">44100 выборок в секунду</key>
+		<key name="SupportedSamples.22050">22050 выб/сек</key>
+		<key name="SupportedSamples.22050.tt">22050 выборок в секунду</key>
+		<key name="SupportedSamples.16000">16000 выб/сек</key>
+		<key name="SupportedSamples.16000.tt">16000 выборок в секунду</key>
+		<key name="SupportedSamples.11025">11025 выб/сек</key>
+		<key name="SupportedSamples.11025.tt">11025 выборок в секунду</key>
+		<key name="SupportedSamples.8000">8000 выб/сек</key>
+		<key name="SupportedSamples.8000.tt">8000 выборок в секунду</key>
+		
+<!-- Локализация класса OCRSelect -->
+		<key name="OCRSelect.title">Распознать скан</key>
+		<key name="OCRSelect.title.tt">Распознать отсканированный текст</key>
+		<key name="OCRSelect.title.help">Распознать отсканированный текст</key>
+		<key name="OCRSelect.file">Файл со сканом</key>
+		<key name="OCRSelect.file.tt">Файл, содержащий отсканированное изображение</key>
+		<key name="OCRSelect.lang">Язык документа</key>
+		<key name="OCRSelect.lang.tt">Язык распознаваемого документа</key>
 		
 	</lang>
 </localization>
