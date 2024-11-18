@@ -1,2 +1,0 @@
-# creolenotepad
-Creole notepad
