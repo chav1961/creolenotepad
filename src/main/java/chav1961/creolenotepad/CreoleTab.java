@@ -384,7 +384,8 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 			tesseract.setDatapath("C:/Program Files/Tesseract-OCR/tessdata");
 			switch (lang) {
 				case en	:
-					tesseract.setLanguage("eng");
+//					tesseract.setLanguage("eng");
+					tesseract.setLanguage("rus");
 					break;
 				case ru	:
 					tesseract.setLanguage("rus");
