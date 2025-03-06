@@ -509,7 +509,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	public void ocrClipboard() {
 		try{
 			if (OCRSelect.isImageInClipboard()) {
-				getCurrentTab().insertOCR((BufferedImage)Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.imageFlavor), getOCRLang());
+				getCurrentTab().insertOCR((BufferedImage)Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.imageFlavor), getOCRLang(), properties.getValue(PROP_TESSERACT_MODEL));
 			}
 		} catch (IOException | UnsupportedFlavorException e) {
 			getLogger().message(Severity.warning, e, e.getLocalizedMessage());
@@ -522,7 +522,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 		
 		try{if (ask(select, localizer, 450, 90)) {
 				if (select.file.exists() && select.file.isFile() && select.file.canRead()) {
-					getCurrentTab().insertOCR(ImageIO.read(select.file), select.lang);
+					getCurrentTab().insertOCR(ImageIO.read(select.file), select.lang, properties.getValue(PROP_TESSERACT_MODEL));
 				}
 			}
 		} catch (ContentException | IOException e) {
@@ -850,7 +850,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 
 	private CreoleTab newTab() {
 		final int			currFileSupport = fcm.appendNewFileSupport();
-		final CreoleTab		tab = new CreoleTab(this, mdi, menuBar, currFileSupport);
+		final CreoleTab		tab = new CreoleTab(this, mdi, menuBar, currFileSupport, properties.getValue(PROP_TESSERACT_MODEL));
 		final JCloseableTab	label = tab.getTabLabel(); 
 		
 		fcm.setCurrentFileSupport(currFileSupport);

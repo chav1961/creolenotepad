@@ -44,7 +44,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditEvent;
-import javax.swing.text.BadLocationException;
 import javax.swing.undo.UndoManager;
 
 import org.mozilla.universalchardet.UniversalDetector;
@@ -110,7 +109,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 	private boolean 						isModified = false;
 	private String							lastInserted = "";
 	
-	CreoleTab(final Application app, final ContentMetadataInterface mdi, final JMenuBar parentMenu, final int fileSupportId) {
+	CreoleTab(final Application app, final ContentMetadataInterface mdi, final JMenuBar parentMenu, final int fileSupportId, final String tesseractData) {
 		setLayout(new BorderLayout());
 		
 		this.app = app;
@@ -148,7 +147,7 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 										anyLoaded = true;
 									}
 									else if (type.getMimeType().startsWith("image")) {
-										loadImageContent(f);
+										loadImageContent(f, tesseractData);
 										anyLoaded = true;
 									}
 								}
@@ -376,12 +375,12 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 		emm.setCheckMaskTo(Application.EDIT_MICROPHONE, isMicrophoneEnabled);
 	}
 	
-	void insertOCR(final BufferedImage image, final SupportedLanguages lang) throws IOException {
+	void insertOCR(final BufferedImage image, final SupportedLanguages lang, final String tesseractData) throws IOException {
 		final Cursor		oldCursor = editor.getCursor();
 		final Tesseract		tesseract = new Tesseract();
 		
 		try{
-			tesseract.setDatapath("C:/Program Files/Tesseract-OCR/tessdata");
+			tesseract.setDatapath(tesseractData);
 			switch (lang) {
 				case en	:
 //					tesseract.setLanguage("eng");
@@ -473,9 +472,9 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 		}
 	}
 	
-	private void loadImageContent(final File imageFile) {
+	private void loadImageContent(final File imageFile, final String tesseractData) {
 		try {
-			insertOCR(ImageIO.read(imageFile), SupportedLanguages.of(editor.getLocale()));
+			insertOCR(ImageIO.read(imageFile), SupportedLanguages.of(editor.getLocale()), tesseractData);
 		} catch (IOException exc) {
 			getLogger().message(Severity.warning, KEY_MESSAGE_OCR_FAILED, imageFile.getAbsolutePath(), exc.getLocalizedMessage());
 		}
