@@ -8,6 +8,7 @@ module chav1961.creolenotepad {
 	requires tess4j;
 	requires simplemagic;
 	requires com.github.albfernandez.juniversalchardet;
+	requires java.xml;
 	
 	exports chav1961.creolenotepad to chav1961.purelib;
 	exports chav1961.creolenotepad.interfaces to chav1961.purelib;

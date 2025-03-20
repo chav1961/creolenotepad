@@ -64,7 +64,7 @@ public class SpellChecker {
     }
     
     // Method to find the Levenshtein distance between two words
-    private int levenshteinDistance(String word1, String word2) {
+    private int levenshteinDistance(CharSequence word1, CharSequence word2) {
     	 int m = word1.length();
          int n = word2.length();
          
