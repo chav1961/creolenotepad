@@ -1,12 +1,18 @@
 package zzz;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveAction;
+import java.util.concurrent.RecursiveTask;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -21,6 +27,7 @@ import chav1961.purelib.basic.BKTree;
 import chav1961.purelib.basic.CharUtils;
 import chav1961.purelib.basic.interfaces.SyntaxTreeInterface;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -54,10 +61,80 @@ public class CorporaLoader {
 			});
 			System.err.println("BK-tree completed "+(System.currentTimeMillis() - start2));
 		}
+		final ForkJoinPool	fjp = ForkJoinPool.commonPool();
+		
+		try(final Reader			rdr = new InputStreamReader(System.in);
+			final BufferedReader	brdr = new BufferedReader(rdr)) {
+			String	line;
+			
+			while ((line = brdr.readLine()) != null) {
+				final String[]	words = line.split("\\s+");
+				final String[]	result = new String[words.length];
+				final Parser	p = new Parser(tree, words, result, 0, words.length-1);
+				
+				fjp.invoke(p);
+				for(String item : result) {
+	        		System.err.println(item);
+				}
+			}
+		} finally {
+			fjp.shutdownNow();
+		} 
 	}
 	
 	private static int calculate(final char[] left, final char[] right) {
 		return CharUtils.calcLevenstain(left, right).distance;
+	}
+
+	private static class Parser extends RecursiveAction {
+		private final BKTree<char[], Lemma> tree;
+		private final String[]	source;
+		private final String[]	result;
+		private final int		from;
+		private final int		to;
+		
+		private Parser(final BKTree<char[], Lemma> tree, final String[] source, final String[] result, final int from, final int to) {
+			this.tree = tree;
+			this.source = source;
+			this.result = result;
+			this.from = from;
+			this.to = to;
+		}
+
+		@Override
+		protected void compute() {
+//			System.err.println("Calc: "+from+"/"+to);
+			if (from == to) {
+				result[from] = process(source[from]);
+			}
+			else {
+				final int		mid = (from + to) / 2;
+				final Parser	left = new Parser(tree, source, result, from, mid); 
+				final Parser	right = new Parser(tree, source, result, mid+1, to);
+				
+				left.fork();
+				right.fork();
+				left.join();
+				right.join();
+			}
+		}
+
+		private String process(final String word) {
+        	final char[]	content = word.toCharArray();
+        	
+        	if (tree.contains(content)) {
+        		return word+" OK";
+        	}
+        	else {
+        		final List<String>	available = new ArrayList<>();
+        		
+        		tree.walk(content, Math.max(1, content.length/3), (c,m,l)->{
+        			available.add(new String(c));
+        			return true;
+        		});
+        		return word+" failed, available are "+available;
+        	}
+		}
 	}
 	
 	private static class CorporaHandler extends DefaultHandler {
