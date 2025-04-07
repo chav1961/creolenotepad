@@ -335,8 +335,8 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 							throw new UnsupportedOperationException("Execution control type ["+e.getExecutionControlEventType()+"] i not supported yet");
 					}
 				});
-				vp.setModel(SupportedLanguages.ru, properties.getProperty(PROP_RU_MODEL, File.class, "c:/vosk-model-small-ru-0.22"));
-				vp.setModel(SupportedLanguages.en, properties.getProperty(PROP_EN_MODEL, File.class, "c:/vosk-model-small-en-us-0.15"));
+				vp.setModel(SupportedLanguages.ru, properties.getProperty(PROP_RU_MODEL, File.class, "d:/vosk-model-small-ru-0.22"));
+				vp.setModel(SupportedLanguages.en, properties.getProperty(PROP_EN_MODEL, File.class, "d:/vosk-model-small-en-us-0.15"));
 			}
 			else {
 				this.vp = null;

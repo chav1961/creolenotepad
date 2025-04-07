@@ -1,5 +1,8 @@
 package zzz;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -9,10 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
-import java.util.concurrent.RecursiveTask;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -26,17 +27,14 @@ import chav1961.purelib.basic.AndOrTree;
 import chav1961.purelib.basic.BKTree;
 import chav1961.purelib.basic.CharUtils;
 import chav1961.purelib.basic.interfaces.SyntaxTreeInterface;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
+import chav1961.purelib.streams.byte2byte.MappedInputStream;
 
 
 public class CorporaLoader {
 	public static void main(final String[] args) throws IOException, ParserConfigurationException, SAXException {
 		final BKTree<char[], Lemma>	tree = new BKTree<>(char[].class, CorporaLoader::calculate);
 		
-		try(final InputStream	is = new FileInputStream("c:/tmp/dict.opcorpora.xml")) {
+		try(final InputStream	is = new MappedInputStream(new File("c:/tmp/dict.opcorpora.xml"))) {
 			final SAXParserFactory 	factory = SAXParserFactory.newInstance();
 			final SAXParser 		saxParser = factory.newSAXParser();
 			final CorporaHandler	ch = new CorporaHandler(); 
@@ -48,14 +46,9 @@ public class CorporaLoader {
 			final long	start2 = System.currentTimeMillis();
 			
 			ch.forms.walk(new SyntaxTreeInterface.Walker<CorporaLoader.Lemma>() {
-//				int	index = 0;
 				@Override
 				public boolean process(final char[] name, final int len, final long id, final Lemma cargo) {
 					tree.add(cargo.text, cargo);
-//					System.err.print(".");
-//					if (index++ % 100 == 0) {
-//						System.err.println(index);
-//					}
 					return true;
 				}
 			});
