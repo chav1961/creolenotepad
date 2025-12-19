@@ -478,7 +478,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 
 	@OnAction("action:/pasteLink")
 	public void pasteLink() {
-		final InsertLink	il = new InsertLink(getLogger());
+		final InsertLink	il = new InsertLink();
 		
 		try{final String	selection = ((CreoleTab)tabs.getSelectedComponent()).getEditor().getSelectedText();
 				
@@ -518,7 +518,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	
 	@OnAction("action:/ocrFile")
 	public void ocrFile() {
-		final OCRSelect	select = new OCRSelect(state);
+		final OCRSelect	select = new OCRSelect();
 		
 		try{if (ask(select, localizer, 450, 90)) {
 				if (select.file.exists() && select.file.isFile() && select.file.canRead()) {
@@ -757,7 +757,7 @@ public class Application extends JFrame implements AutoCloseable, NodeMetadataOw
 	
 	@OnAction("action:/settings")
 	public void settings() {
-		final Settings	settings = new Settings(state, properties);
+		final Settings	settings = new Settings(properties);
 		
 		try{if (ask(settings, localizer, 500, 200)) {
 				settings.storeProperties(properties);

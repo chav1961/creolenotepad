@@ -116,8 +116,8 @@ class CreoleTab extends JPanel implements LoggerFacadeOwner, InputStreamGetter, 
 		this.fileSupportId = fileSupportId;
 		this.toolbar = SwingUtils.toJComponent(mdi.byUIPath(URI.create("ui:/model/navigation.top.toolbarmenu")), JToolBar.class);
 		this.emm = new JEnableMaskManipulator(app.getEnableMaskManipulator(), Application.EDIT_MICROPHONE, toolbar);
-		this.find = new Find(app.getLogger(), editor);
-		this.findReplace = new FindReplace(app.getLogger(), editor);
+		this.find = new Find(editor);
+		this.findReplace = new FindReplace(editor);
 		this.tab = new JCloseableCreoleTab(app.getLocalizer());
 		
         SwingUtils.assignActionListeners(toolbar, app);

@@ -18,8 +18,6 @@ import chav1961.purelib.ui.interfaces.RefreshMode;
 @LocaleResourceLocation("i18n:xml:root://chav1961.creolenotepad.dialogs.OCRSelect/chav1961/creolenotepad/i18n/localization.xml")
 @LocaleResource(value="OCRSelect.title",tooltip="OCRSelect.title.tt",help="OCRSelect.title.help")
 public class OCRSelect implements FormManager<Object, OCRSelect>, ModuleAccessor {
-	private final LoggerFacade	facade; 
-
 	@LocaleResource(value="OCRSelect.file",tooltip="OCRSelect.file.tt")
 	@Format("30s")
 	public File					file = new File("./");
@@ -28,23 +26,12 @@ public class OCRSelect implements FormManager<Object, OCRSelect>, ModuleAccessor
 	@Format("10m")
 	public SupportedLanguages	lang = SupportedLanguages.getDefaultLanguage();
 	
-	public OCRSelect(final LoggerFacade facade) {
-		if (facade == null) {
-			throw new NullPointerException("Logger facade can't be null");
-		}
-		else {
-			this.facade = facade;
-		}
+	public OCRSelect() {
 	}
 	
 	@Override
-	public RefreshMode onField(final OCRSelect inst, final Object id, final String fieldName, final Object oldValue, final boolean beforeCommit) throws FlowException, LocalizationException {
+	public RefreshMode onField(LoggerFacade logger,final OCRSelect inst, final Object id, final String fieldName, final Object oldValue, final boolean beforeCommit) throws FlowException, LocalizationException {
 		return "fromClipboard".equals(fieldName) ? RefreshMode.RECORD_ONLY : RefreshMode.DEFAULT;
-	}
-
-	@Override
-	public LoggerFacade getLogger() {
-		return facade;
 	}
 
 	@Override

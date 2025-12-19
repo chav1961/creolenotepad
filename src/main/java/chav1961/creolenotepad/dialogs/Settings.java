@@ -20,8 +20,6 @@ import chav1961.purelib.ui.interfaces.UIItemState;
 @LocaleResourceLocation("i18n:xml:root://chav1961.creolenotepad.dialogs.Settings/chav1961/creolenotepad/i18n/localization.xml")
 @LocaleResource(value="settings.title",tooltip="settings.title.tt",help="settings.title.help")
 public class Settings implements FormManager<Object, Settings>, ModuleAccessor, UIItemState {
-	private final LoggerFacade	facade;
-
 	@LocaleResource(value="settings.cssFile",tooltip="settings.cssFile.tt")
 	@Format(value="30s",wizardType="selectFile=true;selectDir=false;mustExists=true;forOpen=true")
 	public File				cssFile = new File("./");
@@ -54,15 +52,11 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor, 
 //	@Format("5ms")
 	public SupportedSamples	sampleRate = SupportedSamples.S16000;
 	
-	public Settings(final LoggerFacade facade, final SubstitutableProperties props) {
-		if (facade == null) {
-			throw new NullPointerException("Logger facade can't be null");
-		}
-		else if (props == null) {
+	public Settings(final SubstitutableProperties props) {
+		if (props == null) {
 			throw new NullPointerException("Properties can't be null");
 		}
 		else {
-			this.facade = facade;
 			this.cssFile = props.getProperty(Application.PROP_CSS_FILE, File.class, "./");
 			this.useVoiceInput = props.getProperty(Application.PROP_USE_VOICE_INPUT, boolean.class, "false");
 			this.ruModelDir = props.getProperty(Application.PROP_RU_MODEL, File.class, "./");
@@ -75,18 +69,13 @@ public class Settings implements FormManager<Object, Settings>, ModuleAccessor, 
 	}
 
 	@Override
-	public RefreshMode onField(final Settings inst, final Object id, final String fieldName, final Object oldValue, final boolean beforeCommit) throws FlowException, LocalizationException {
+	public RefreshMode onField(LoggerFacade logger, final Settings inst, final Object id, final String fieldName, final Object oldValue, final boolean beforeCommit) throws FlowException, LocalizationException {
 		switch (fieldName) {
 			case "useVoiceInput" : case "useOCR" :
 				return RefreshMode.RECORD_ONLY;
 			default :
 				return RefreshMode.DEFAULT;
 		}
-	}
-
-	@Override
-	public LoggerFacade getLogger() {
-		return facade;
 	}
 
 	@Override

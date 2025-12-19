@@ -18,7 +18,6 @@ import chav1961.purelib.ui.swing.useful.JCreoleEditor;
 @LocaleResource(value="find.title",tooltip="find.title.tt",help="find.title.help")
 @Action(resource=@LocaleResource(value="find.button.find",tooltip="find.button.find.tt"),actionString="find")
 public class Find implements FormManager<Object, Find>, ModuleAccessor {
-	private final LoggerFacade	facade;
 	private final JCreoleEditor	editor;
 
 	@LocaleResource(value="find.string",tooltip="find.string.tt")
@@ -37,27 +36,18 @@ public class Find implements FormManager<Object, Find>, ModuleAccessor {
 	@Format("1")
 	public boolean	useRegex = false;
 	
-	public Find(final LoggerFacade facade, final JCreoleEditor editor) {
-		if (facade == null) {
-			throw new NullPointerException("Logger facade cn't be null");
-		}
-		else if (editor == null) {
+	public Find(final JCreoleEditor editor) {
+		if (editor == null) {
 			throw new NullPointerException("Creole editor can't be null");
 		}
 		else {
-			this.facade = facade;
 			this.editor = editor;
 		}
 	}
 
 	@Override
-	public RefreshMode onField(Find inst, Object id, String fieldName, Object oldValue, boolean beforeCommit) throws FlowException, LocalizationException {
+	public RefreshMode onField(LoggerFacade logger, Find inst, Object id, String fieldName, Object oldValue, boolean beforeCommit) throws FlowException, LocalizationException {
 		return RefreshMode.DEFAULT;
-	}
-
-	@Override
-	public LoggerFacade getLogger() {
-		return facade;
 	}
 
 	@Override
@@ -68,11 +58,11 @@ public class Find implements FormManager<Object, Find>, ModuleAccessor {
 	}
 
 	@Override
-	public RefreshMode onAction(final Find inst, final Object id, final String actionName, final Object... parameter) throws FlowException, LocalizationException {
+	public RefreshMode onAction(LoggerFacade logger, final Find inst, final Object id, final String actionName, final Object... parameter) throws FlowException, LocalizationException {
 		switch (actionName) {
 			case "app:action:/Find.find"	:
 				if(!InternalUtils.find(editor, toFind, backward, wholeWord, useRegex)) {
-					getLogger().message(Severity.warning, Application.KEY_APPLICATION_MESSAGE_NOT_FOUND);
+					logger.message(Severity.warning, Application.KEY_APPLICATION_MESSAGE_NOT_FOUND);
 				}
 				break;
 			default :
